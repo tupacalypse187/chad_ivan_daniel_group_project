@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Follow</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid bg-light">
+        <div class="row">
+            <div class="col-8 bg-info ml-3 mt-3 rounded">
+                <h3 class="display-4 m-4 text-white">Dojo Room</h3>
+            </div>
+            <div class="col-3 text-center ml-5 mt-5">
+                <a class="h3 text-decoration-none text-info p-3 border-right border-dark" href="/ninjas">Ninjas</a>
+                <a class="h3 text-decoration-none text-info p-3" href="/logout">Logout</a>
+            </div>
+        </div>
+        <hr class="bg-dark">
+        <div class="row">
+            <div class="col">
+                <nav class="navbar navbar-light bg-light justify-content-between">
+                    <h4 class="display-5">Ninjas You May Know</h4>
+                    <form class="form-inline">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-info my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                </nav>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped table-dark text-center text-white" height="400px">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Unfollow/Follow</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Ivan</td>
+                            <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow/{{}}">Follow</a></button></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Chad</td>
+                            <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow/{{}}">Follow</a></button></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Daniel</td>
+                            <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow/{{}}">Follow</a></button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row bg-info m-3 rounded">
+            <div class="col text-center">
+                <button class="btn m-3 bg-dark"><a class="h5 text-decoration-none text-white" href="/">Home</a></button>
+            </div>
+        </div>
