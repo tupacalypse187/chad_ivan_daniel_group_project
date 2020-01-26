@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container-fluid" style="background-image: url('../images/dojo.jpeg')">
+    <!-- <div class="container-fluid" style="background-image: url('../images/dojo.jpeg')"> -->
+    <div class="container-fluid" style="background-image: url({{ url_for('static', filename='images/dojo.jpeg') }})">
         <div class="row"> 
             <div class="col text-center text-white">
                 <h1 class="display-1 p-3">Welcome to Dojo Room</h1>
@@ -16,9 +17,14 @@
         </div>
         <div class="row">
             <div class="col-5 mx-5 text-white">
+                {% with messages=get_flashed_messages() %}
+                    {% for message in messages %}
+                        <p>{{message}}</p>
+                    {% endfor %}
+                {% endwith %}
                 <h4>Register</h4>
                 <hr class="border-light">
-                <form action="/create_user" method="POST">
+                <form action="/register" method="POST">
                     <div class="form-group">
                         <label for="fname">First Name</label>
                         <input type="text" class="form-control w-50" name="fname">

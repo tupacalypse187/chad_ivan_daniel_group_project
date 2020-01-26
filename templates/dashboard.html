@@ -16,12 +16,20 @@
             <div class="col-3 text-center ml-5 mt-5">
                 <a class="h3 text-decoration-none text-info p-3 border-right border-dark" href="/ninjas">Ninjas</a>
                 <a class="h3 text-decoration-none text-info p-3" href="/logout">Logout</a>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <br>{{message}}</br>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
             </div>
         </div>
         <hr class="bg-dark">
         <div class="row">
             <div class="col-2 mx-4 mt-3">
-                <img class="ml-2" src="../images/dojo.jpeg" alt="A picture of dojo" width="200px" height="200px">
+                <!-- <img class="ml-2" src="../images/dojo.jpeg" alt="A picture of dojo" width="200px" height="200px"> -->
+                <img class="ml-2" src="{{ url_for('static', filename='images/dojo.jpeg') }}" alt="A picture of dojo" width="200px" height="200px">
                 <form action="/upload_img" method="POST" enctype="multipart/form-data">
                     <div class="form-group mt-3">
                         <div class="custom-file">
@@ -41,11 +49,12 @@
                 </div>
                 <div class="m-5">
                     <h5>Ninjas Who Follow You:</h5>
-                    <img class="mt-4 ml-5" src="../images/dojo.jpeg" width="100px" height="100px">
+                    <!-- <img class="mt-4 ml-5" src="../images/dojo.jpeg" width="100px" height="100px"> -->
+                    <img class="mt-4 ml-5" src="{{ url_for('static', filename='images/dojo.jpeg') }}" width="100px" height="100px">
                 </div>
             </div>
             <div class="col">
-                <h3 class="text-center p-3">Welcome, {{}}</h3>
+                <h3 class="text-center p-3">Welcome, {{user_data['first_name']}} {{user_data['last_name']}}</h3>
             </div>
         </div>
         <div class="row">
@@ -67,11 +76,11 @@
                         <p>Hello World!!!</p>
                     </div>
                 </div>         
-                <p>{{}} likes.</p>
-                <p><a href="/unlike_whisper/{{}}"><button>Unlike</button></a></p>
-                <p><a href="/like_whisper/{{}}"><button>Like</button></a></p>
-                <p><a href="/delete_whisper/{{}}"><button>Delete</button></a></p>
-                <p><a href="/edit_whisper/{{}}"><button>Edit</button></a></p>  
+                <!-- <p>{#{}#} likes.</p>
+                <p><a href="/unlike_whisper/{#{}#}"><button>Unlike</button></a></p>
+                <p><a href="/like_whisper/{#{}#}"><button>Like</button></a></p>
+                <p><a href="/delete_whisper/{#{}#}"><button>Delete</button></a></p>
+                <p><a href="/edit_whisper/{#{}#}"><button>Edit</button></a></p> -->
             </div>
         </div>
     </div>
