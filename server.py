@@ -1,8 +1,14 @@
 from flask import Flask, render_template, request, redirect, session, flash
 from mysqlconnection import connectToMySQL
 import re
+import base64
+import os
 #from datetime import datetime
 from flask_bcrypt import Bcrypt
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from yubico_client.py3 import b
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 DATABASE = 'dojo_messages'
 app = Flask(__name__)
@@ -51,6 +57,18 @@ def on_register():
         # print(pw_hash)  
         # prints something like b'$2b$12$sqjyok5RQccl9S6eFLhEPuaRaJCcH3Esl2RWLm/cimMIEnhnLb7iC'
         # be sure you set up your database so it can store password hashes this long (63 characters)
+        email_provided = request.form['email'] # This is input in the form of a string
+        email = email_provided.encode() # Convert to type bytes
+        salt = b(os.urandom(30)) # CHANGE THIS - recommend using a key from os.urandom(16), must be of type bytes
+        kdf = PBKDF2HMAC(
+            algorithm=hashes.SHA256(),
+            length=32,
+            salt=salt,
+            iterations=100000,
+            backend=default_backend()
+        )
+        ukey = base64.urlsafe_b64encode(kdf.derive(email))
+        print(ukey)
         mysql = connectToMySQL(DATABASE)
         query = "INSERT INTO users (first_name, last_name, email, password, created_at, updated_at) VALUES (%(fn)s, %(ln)s, %(em)s, %(pw)s, NOW(), NOW());"
         data = {
@@ -63,6 +81,13 @@ def on_register():
         # add user to database
         # display success message
         # flash("User successfully added")
+        mysql = connectToMySQL(DATABASE)
+        query = "INSERT INTO dojo_messages.keys (user_id, user_key) VALUES (%(u_id)s, %(key)s);"
+        data = {
+            "u_id": session['user_id'],
+            "key": ukey
+        }
+        mysql.query_db(query, data)
         return redirect('/dashboard')
     return redirect('/')
 
