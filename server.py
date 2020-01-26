@@ -8,6 +8,7 @@ from flask_bcrypt import Bcrypt
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+from cryptography.fernet import Fernet
 from yubico_client.py3 import b
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 DATABASE = 'dojo_messages'
@@ -149,9 +150,30 @@ def on_messages_dashboard():
     query = "SELECT *, COUNT(message_like_id) AS likes FROM messages JOIN users ON messages.author_id = users.user_id LEFT JOIN user_likes ON messages.message_id = user_likes.message_like_id GROUP BY messages.message_id"
     messages = mysql.query_db(query, data)
 
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+    data = {
+        'u_id': session['user_id']
+    }
+    key_data = mysql.query_db(query, data)
+    if key_data:
+        key_data = key_data[0]
+    
+    print(key_data)
+    print(b(key_data['user_key']))
+    # b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
+    # key = b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
+    key = b(key_data['user_key'])
+    crypt_message = "this is a secret message".encode()
+    f = Fernet(key)
+    encrypted = f.encrypt(crypt_message)
+    print(encrypted)
+    decrypted = f.decrypt(encrypted)
+    print(decrypted)
+
     # return render_template("thoughts.html", user_data=user_data, messages=messages, liked_messages=liked_messages)
 
-    return render_template("dashboard.html", user_data=user_data, messages=messages)
+    return render_template("dashboard.html", user_data=user_data, messages=messages, key_data=key_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
