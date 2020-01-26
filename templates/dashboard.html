@@ -61,7 +61,7 @@
             <div class="col p-3 mx-3">
                 <h2>Whisper... Share Your Secret Here:</h2>
                 <form action="/write_whisper" method="POST">
-                    <textarea class="form-control w-50" name="whisper" placeholder="Shhh..."></textarea>
+                    <textarea class="form-control w-50" name="a_whisper" placeholder="Shhh..."></textarea>
                     <input class="mt-3" type="submit" value="Post">
                 </form>
             </div>
@@ -70,10 +70,20 @@
         <div class="row">
             <div class="col-6 mx-3">
                 <h2>Your Feed:</h2>
-                <p class="font-weight-bold mt-5">Ivan Mallory whispers:</p>
                 <div class="card ml-5">
                     <div class="card-body">
-                        <p>Hello World!!!</p>
+                    {% if whispers %}
+                        {% for whisper in whispers %}
+                            <p class="font-weight-bold mt-5">{{whisper['first_name']}} whispers:</p>
+                            <!-- <p>Hello World!!!</p> -->
+                            <p>{{whisper['message']}}</p>
+                            <p>{{whisper['likes']}} people like this</p>
+                            <p><button><a href="/whisper/{{whisper['message_id']}}">Details</a></button></p>
+                            {% if whisper.author_id == session['user_id'] %}
+                                <p><button><a href="/delete/{{whisper['message_id']}}">Delete</a></button></p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                     </div>
                 </div>         
                 <!-- <p>{#{}#} likes.</p>

@@ -58,7 +58,7 @@ CREATE TABLE `keys` (
   PRIMARY KEY (`key_id`),
   KEY `fk_keys_users1_idx` (`user_id`),
   CONSTRAINT `fk_keys_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,6 +67,7 @@ CREATE TABLE `keys` (
 
 LOCK TABLES `keys` WRITE;
 /*!40000 ALTER TABLE `keys` DISABLE KEYS */;
+INSERT INTO `keys` VALUES (1,1,'T4wyqeDwPX3XRZw93sVQQwXcdJJDLMg7ud6gMQtg8rM=');
 /*!40000 ALTER TABLE `keys` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -78,7 +79,7 @@ DROP TABLE IF EXISTS `messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `messages` (
-  `message_id` int(11) NOT NULL,
+  `message_id` int(11) NOT NULL AUTO_INCREMENT,
   `author_id` int(11) NOT NULL,
   `message` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
@@ -143,7 +144,7 @@ CREATE TABLE `users` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `reg_id_UNIQUE` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +153,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (5,'Mike','Jones','m@j.com','$2b$12$oE.KHOc0qCUJLos2xCvmBOEq8kCecrBts9TQkLzw/FWtq.SsDlbG2','2020-01-25 16:48:32','2020-01-25 16:48:32');
+INSERT INTO `users` VALUES (1,'Mike','Jones','m@j.com','$2b$12$OXW5vzAW5ItFzQVsly5iBevnQFIHPCkCXtflqEURESEk4nag1XC6C','2020-01-26 15:13:24','2020-01-26 15:13:24');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -165,4 +166,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-25 17:07:59
+-- Dump completed on 2020-01-26 15:13:48
