@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `dojo_messages`.`users` (
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `reg_id_UNIQUE` (`user_id` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 5
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
 
 
@@ -62,7 +62,7 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `dojo_messages`.`messages` ;
 
 CREATE TABLE IF NOT EXISTS `dojo_messages`.`messages` (
-  `message_id` INT(11) NOT NULL,
+  `message_id` INT(11) NOT NULL AUTO_INCREMENT,
   `author_id` INT(11) NOT NULL,
   `message` VARCHAR(255) NULL DEFAULT NULL,
   `created_at` DATETIME NULL DEFAULT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `dojo_messages`.`messages` (
     FOREIGN KEY (`author_id`)
     REFERENCES `dojo_messages`.`users` (`user_id`))
 ENGINE = InnoDB
-AUTO_INCREMENT = 11
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
 
 

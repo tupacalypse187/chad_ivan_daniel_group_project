@@ -25,10 +25,10 @@ def on_register():
     is_valid = True
     if len(request.form['fname']) < 2:
         is_valid = False
-    flash("Please enter a first name of at least 2 characters")
+        flash("Please enter a first name of at least 2 characters")
     if len(request.form['lname']) < 2:
         is_valid = False
-    flash("Please enter a last name of at least 2 characters")
+        flash("Please enter a last name of at least 2 characters")
     if len(request.form['email']) < 1:
         is_valid = False
         flash("Email cannot be blank", 'email')
@@ -47,7 +47,7 @@ def on_register():
             is_valid = False
     if len(request.form['pass']) < 8:
         is_valid = False
-    flash("Please enter a password of at least 8 characters")
+        flash("Please enter a password of at least 8 characters")
     if request.form['pass'] != request.form['cpass']:
         is_valid = False
         flash("Passwords do not match")
@@ -147,8 +147,8 @@ def on_messages_dashboard():
         user_data = user_data[0]
     
     mysql = connectToMySQL(DATABASE)
-    query = "SELECT *, COUNT(message_like_id) AS likes FROM messages JOIN users ON messages.author_id = users.user_id LEFT JOIN user_likes ON messages.message_id = user_likes.message_like_id GROUP BY messages.message_id"
-    messages = mysql.query_db(query, data)
+    query = "SELECT *, COUNT(message_like_id) AS likes FROM messages JOIN users ON messages.author_id = users.user_id LEFT JOIN user_likes ON messages.message_id = user_likes.message_like_id GROUP BY messages.message_id ORDER BY messages.message_id DESC"
+    whispers = mysql.query_db(query, data)
 
     mysql = connectToMySQL(DATABASE)
     query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
@@ -173,7 +173,26 @@ def on_messages_dashboard():
 
     # return render_template("thoughts.html", user_data=user_data, messages=messages, liked_messages=liked_messages)
 
-    return render_template("dashboard.html", user_data=user_data, messages=messages, key_data=key_data)
+    return render_template("dashboard.html", user_data=user_data, whispers=whispers, key_data=key_data)
+
+@app.route('/write_whisper', methods=['POST'])
+def on_add_whisper():
+    if 'user_id' not in session:
+        return redirect("/")
+    is_valid = True
+    if len(request.form['a_whisper']) < 5:
+        is_valid = False
+        flash("Whisper must be at least 5 characters.")
+    if is_valid:
+        mysql = connectToMySQL(DATABASE)
+        query = "INSERT INTO messages (message, author_id, created_at, updated_at) VALUES (%(msg)s, %(a_id)s, NOW(), NOW())"
+        data = {
+            'msg': request.form['a_whisper'],
+            'a_id': session['user_id']
+        }
+        mysql.query_db(query, data)
+    return redirect('/dashboard')
+
 
 if __name__ == "__main__":
     app.run(debug=True)
