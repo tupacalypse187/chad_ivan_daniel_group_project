@@ -41,7 +41,6 @@ def on_register():
             "em": request.form['email']
         }
         result = db.query_db("SELECT * FROM users WHERE email = %(em)s",data)
-        
         if len(result) > 0:
             flash("This email address is already registered.")
             is_valid = False
