@@ -58,7 +58,7 @@ CREATE TABLE `keys` (
   PRIMARY KEY (`key_id`),
   KEY `fk_keys_users1_idx` (`user_id`),
   CONSTRAINT `fk_keys_users1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,6 +67,7 @@ CREATE TABLE `keys` (
 
 LOCK TABLES `keys` WRITE;
 /*!40000 ALTER TABLE `keys` DISABLE KEYS */;
+INSERT INTO `keys` VALUES (1,1,'3J7c8SIEw44CHHPDDstHvAwqxmedtarM3u4PoALjWko=');
 /*!40000 ALTER TABLE `keys` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -143,7 +144,7 @@ CREATE TABLE `users` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `reg_id_UNIQUE` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -152,7 +153,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (5,'Mike','Jones','m@j.com','$2b$12$oE.KHOc0qCUJLos2xCvmBOEq8kCecrBts9TQkLzw/FWtq.SsDlbG2','2020-01-25 16:48:32','2020-01-25 16:48:32');
+INSERT INTO `users` VALUES (1,'Mike','Jones','m@j.com','$2b$12$XbPCouq0Y2b/KtHAlQp7gO1Wc2t1umSbv9K153TfG7iT.9RoZ9V3a','2020-01-26 13:15:40','2020-01-26 13:15:40');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -165,4 +166,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-25 17:07:59
+-- Dump completed on 2020-01-26 13:16:29

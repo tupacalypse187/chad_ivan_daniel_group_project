@@ -24,10 +24,10 @@ def on_register():
     is_valid = True
     if len(request.form['fname']) < 2:
         is_valid = False
-    flash("Please enter a first name of at least 2 characters")
+        flash("Please enter a first name of at least 2 characters")
     if len(request.form['lname']) < 2:
         is_valid = False
-    flash("Please enter a last name of at least 2 characters")
+        flash("Please enter a last name of at least 2 characters")
     if len(request.form['email']) < 1:
         is_valid = False
         flash("Email cannot be blank", 'email')
@@ -40,13 +40,12 @@ def on_register():
             "em": request.form['email']
         }
         result = db.query_db("SELECT * FROM users WHERE email = %(em)s",data)
-        
         if len(result) > 0:
             flash("This email address is already registered.")
             is_valid = False
     if len(request.form['pass']) < 8:
         is_valid = False
-    flash("Please enter a password of at least 8 characters")
+        flash("Please enter a password of at least 8 characters")
     if request.form['pass'] != request.form['cpass']:
         is_valid = False
         flash("Passwords do not match")
