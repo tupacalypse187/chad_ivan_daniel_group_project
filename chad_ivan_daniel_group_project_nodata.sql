@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `dojo_messages`.`users` (
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `reg_id_UNIQUE` (`user_id` ASC) VISIBLE)
 ENGINE = InnoDB
-AUTO_INCREMENT = 5
+AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
 
 
