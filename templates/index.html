@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Dojo Room</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
+
 <body>
     <!-- <div class="container-fluid" style="background-image: url('../images/dojo.jpeg')"> -->
     <div class="container-fluid" style="background-image: url({{ url_for('static', filename='images/dojo.jpeg') }})">
-        <div class="row"> 
+        <div class="row">
             <div class="col text-center text-white">
                 <h1 class="display-1 p-3">Welcome to Dojo Room</h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-5 mx-5 text-white">
+            <button id="sReg">Register</button>
+            <div class="col-5 text-white" id="register">
                 {% with messages=get_flashed_messages() %}
-                    {% for message in messages %}
-                        <p>{{message}}</p>
-                    {% endfor %}
+                {% for message in messages %}
+                <p>{{message}}</p>
+                {% endfor %}
                 {% endwith %}
                 <h4>Register</h4>
                 <hr class="border-light">
@@ -48,8 +52,9 @@
                     <button type="submit" class="btn btn-primary">Register</button>
                 </form>
             </div>
-            <div class="col-5 ml-5 text-white">
-                <h4>Login</h4>
+
+            <div class="col-5 text-white" id="login">
+                <h4>login</h4>
                 <hr class="border-light">
                 <form action="/login" method="POST">
                     <div class="form-group">
@@ -70,23 +75,67 @@
             </div>
         </div>
     </div>
-<script
-    src="https://code.jquery.com/jquery-3.4.1.min.js"
-    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" 
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <style>
+        #register {
+            display: none;
+            left: -2000px;
+            margin-left: calc(-72px - 230px);
+        }
+
+        #login {
+            left: 50%;
+            margin-left: calc(-72px - 230px);
+        }
+    </style>
     <script type="text/javascript">
-        $("#register").hide();
-        $(document).ready(function() {
-            $("button").click(function(){
-                $("#sReg").hide();
-                $("#register").animate({ height: 'toggle' });
+        $(document).ready(function () {
+            var $button = $('#sReg')
+
+            $button.click(function () {
+
+                // Gets current and next view
+                var goTo = $button.html().toLowerCase();
+                var hide, leftPos;
+/*
+                hide = goTo === 'login'
+                    ? 'register'
+                    : 'login';
+
+                leftPos = goTo === 'register'
+                    ? '-2000px'
+                    : '2000px';*/
+
+
+                if(goTo === 'login') {
+                    hide = 'register';
+                    leftPos = '2000px';
+                } else {
+                    hide = 'login';
+                    leftPos = '-2000px';
+                }
+                
+                var $hide = $('#' + hide);
+                var $goTo = $('#' + goTo);
+
+                // Hides current view
+                $hide.animate({ 'left': leftPos }, function () {
+                    var buttonText = goTo === 'login' ? 'Register' : 'Login';
+                    $button.html(buttonText);
+
+                    $hide.hide();
+                    $goTo.show().animate({ left: '50%' });
+                });
             });
-        });
-    </script> 
-</script> 
+        }); 
+    </script>
 </body>
+
 </html>
