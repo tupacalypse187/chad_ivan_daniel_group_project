@@ -70,7 +70,9 @@ def on_register():
         ukey = base64.urlsafe_b64encode(kdf.derive(email))
         print(ukey)
         mysql = connectToMySQL(DATABASE)
-        query = "INSERT INTO users (first_name, last_name, email, password, created_at, updated_at) VALUES (%(fn)s, %(ln)s, %(em)s, %(pw)s, NOW(), NOW());"
+        query = """INSERT INTO users 
+        (first_name, last_name, email, password, created_at, updated_at) 
+        VALUES (%(fn)s, %(ln)s, %(em)s, %(pw)s, NOW(), NOW());"""
         data = {
             "fn": request.form["fname"],
             "ln": request.form["lname"],
@@ -146,7 +148,13 @@ def on_messages_dashboard():
         user_data = user_data[0]
     
     mysql = connectToMySQL(DATABASE)
-    query = "SELECT *, COUNT(message_like_id) AS likes FROM messages JOIN users ON messages.author_id = users.user_id LEFT JOIN user_likes ON messages.message_id = user_likes.message_like_id GROUP BY messages.message_id ORDER BY messages.message_id DESC"
+    query = """SELECT *, 
+    COUNT(message_like_id) AS likes 
+    FROM messages 
+    JOIN users ON messages.author_id = users.user_id 
+    LEFT JOIN user_likes 
+    ON messages.message_id = user_likes.message_like_id 
+    GROUP BY messages.message_id ORDER BY messages.message_id DESC"""
     whispers = mysql.query_db(query, data)
 
     mysql = connectToMySQL(DATABASE)
