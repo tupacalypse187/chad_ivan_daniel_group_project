@@ -82,9 +82,11 @@
         $("#register").hide();
         $(document).ready(function() {
             $("button").click(function(){
-                $("#register").toggle();
+                $("#sReg").hide();
+                $("#register").animate({ height: 'toggle' });
             });
         });
+    </script> 
 </script> 
 </body>
 </html>
