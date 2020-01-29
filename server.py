@@ -200,6 +200,19 @@ def on_add_whisper():
         mysql.query_db(query, data)
     return redirect('/dashboard')
 
+@app.route("/delete_whisper/<message_id>")
+def on_delete(message_id):
+
+    mysql = connectToMySQL(DATABASE)
+    query = "DELETE FROM messages WHERE message_id = %(m_id)s AND author_id = %(u_id)s"
+    data = {
+        'm_id': message_id,
+        'u_id': session['user_id']
+    }
+    mysql.query_db(query, data)
+
+    return redirect("/dashboard")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
