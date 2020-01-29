@@ -35,27 +35,23 @@
                 <table class="table table-striped table-dark text-center text-white" height="400px">
                     <thead>
                         <tr>
-                            <th scope="col"></th>
+                            <!-- <th scope="col"></th> -->
                             <th scope="col">Name</th>
                             <th scope="col">Unfollow/Follow</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for user in users %}
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Ivan</td>
-                            <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow/{{}}">Follow</a></button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Chad</td>
-                            <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow/{{}}">Follow</a></button></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Daniel</td>
-                            <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow/{{}}">Follow</a></button></td>
-                        </tr>
+                            <!-- <th scope="row">1</th> -->
+                            <td>{{user['first_name']}} {{user['last_name']}}</td>
+                            {% if user['user_id'] not in followed_ids %}
+                                    <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow_user/{{user['user_id']}}">Follow</a></button></td>
+                             {% elif user['user_id'] in followed_ids %}
+                                    <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/unfollow_user/{{user['user_id']}}">Unfollow</a></button></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>

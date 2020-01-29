@@ -213,6 +213,47 @@ def on_delete(message_id):
 
     return redirect("/dashboard")
 
+@app.route("/ninjas")
+def users_to_follow():
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT followed_id FROM followers WHERE follower_id = %(u_id)s"
+    data = {
+        'u_id': session['user_id']
+    }
+    followed_users = mysql.query_db(query, data)
+    followed_ids = [data['followed_id'] for data in followed_users]
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT users.user_id, users.first_name, users.last_name FROM users WHERE users.user_id != %(u_id)s"
+    data = {
+        'u_id': session['user_id']
+    }
+    users = mysql.query_db(query, data)
+    print(users)
+    return render_template("/follow.html", users=users, followed_ids=followed_ids)
+
+@app.route("/follow_user/<user_id>")
+def follow_this_user(user_id):
+    mysql = connectToMySQL(DATABASE)
+    query = "INSERT INTO followers (follower_id, followed_id) VALUES (%(folwr)s, %(folwd)s)"
+    data = {
+        'folwr': session['user_id'],
+        'folwd': user_id
+    }
+    mysql.query_db(query, data)
+    return redirect("/ninjas")
+
+@app.route("/unfollow_user/<f_id>")
+def on_unfollow(f_id):
+    mysql = connectToMySQL(DATABASE)
+    query = "DELETE FROM followers WHERE follower_id = %(u_id)s AND followed_id = %(f_id)s"
+    data = {
+        'u_id': session['user_id'],
+        'f_id': f_id
+    }
+    mysql.query_db(query, data)
+    return redirect("/ninjas")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
