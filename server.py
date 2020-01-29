@@ -232,7 +232,6 @@ def users_to_follow():
     print(users)
     return render_template("/follow.html", users=users, followed_ids=followed_ids)
 
-
 @app.route("/follow_user/<user_id>")
 def follow_this_user(user_id):
     mysql = connectToMySQL(DATABASE)
