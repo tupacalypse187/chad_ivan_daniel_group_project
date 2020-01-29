@@ -57,9 +57,10 @@
                 <h3 class="text-center p-3">Welcome, {{user_data['first_name']}} {{user_data['last_name']}}</h3>
             </div>
         </div>
-        <div class="row">
+        <button id= "show">show</button>
+        <div class="row" id = "whisper">
             <div class="col p-3 mx-3">
-                <h2>Whisper... Share Your Secret Here:</h2>
+                <h2><button id= "bWhis">Whisper...</button> Share Your Secret Here:</h2>
                 <form action="/write_whisper" method="POST">
                     <textarea class="form-control w-50" name="a_whisper" placeholder="Shhh..."></textarea>
                     <input class="mt-3" type="submit" value="Post">
@@ -67,7 +68,7 @@
             </div>
         </div>
         <hr>
-        <div class="row">
+        <div class="row" id = "feed">
             <div class="col-6 mx-3">
                 <h2>Your Feed:</h2>
                 <div class="card ml-5">
@@ -94,5 +95,38 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    $(document).ready(function () {
+        var $button = $('#bWhis')
+            $button.click(function() {
+                var goTo = $button.html().toLowerCase()
+                var hide, show;
+                $button.toggle();
+                $("#feed").hide(),
+                $("#whisper").hide();
+            $("#show").click(function(){
+                $("#feed").show(),
+                $("#whisper").show();
+            });
+                
+                /*
+                hide = goTo === 'login'
+                    ? 'register'
+                    : 'login';
+                leftPos = goTo === 'register'
+                    ? '-2000px'
+                    : '2000px';*/
+            });
+                    
+        });
+    </script>
 </body>
 </html>
