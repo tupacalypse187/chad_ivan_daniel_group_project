@@ -78,9 +78,11 @@
                             <!-- <p>Hello World!!!</p> -->
                             <p>{{whisper['message']}}</p>
                             <p>{{whisper['likes']}} people like this</p>
-                            <p><button><a href="/whisper/{{whisper['message_id']}}">Details</a></button></p>
                             {% if whisper.author_id == session['user_id'] %}
-                                <p><button><a href="/delete/{{whisper['message_id']}}">Delete</a></button></p>
+                                <p><button><a href="/delete_whisper/{{whisper['message_id']}}">Delete</a></button></p>
+                            {% endif %}
+                            {% if whisper.author_id != session['user_id'] %}
+                                <p><button><a href="/follow/{{whisper['author_id']}}">Follow {{whisper['first_name']}} {{whisper['last_name']}}</a></button></p>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
