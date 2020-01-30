@@ -157,6 +157,28 @@ def on_messages_dashboard():
     GROUP BY messages.message_id ORDER BY messages.message_id DESC"""
     whispers = mysql.query_db(query, data)
 
+
+
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT followed_id FROM followers WHERE follower_id = %(u_id)s"
+    data = {
+        'u_id': session['user_id']
+    }
+    followed_users = mysql.query_db(query, data)
+    followed_ids = [data['followed_id'] for data in followed_users]
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT users.user_id, users.first_name, users.last_name FROM users WHERE users.user_id != %(u_id)s"
+    data = {
+        'u_id': session['user_id']
+    }
+    users = mysql.query_db(query, data)
+
+
+
+
+
     mysql = connectToMySQL(DATABASE)
     query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
     data = {
@@ -165,11 +187,39 @@ def on_messages_dashboard():
     key_data = mysql.query_db(query, data)
     if key_data:
         key_data = key_data[0]
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key FROM messages JOIN dojo_messages.keys ON messages.author_id = dojo_messages.keys.user_id"
+    dec_whispers = mysql.query_db(query, data)
+
+    for i in dec_whispers:
+        # print(i['user_key'])
+        key = (i['user_key'])
+        f = Fernet(key)
+        for user in users:
+            print(user)
+            print(f"HIHIHIHIH***** {followed_ids}")
+            if user['user_id'] in followed_ids:
+                i['message'] = f.decrypt(b(i['message']))
+                i['message'] = i['message'].decode("utf-8")
+        print(i['message'])
+
+    # for i in dec_whispers:
+    #     print(i['message'])
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+    data = {
+        'u_id': session['user_id']
+    }
+    key_data = mysql.query_db(query, data)
+    if key_data:
+            key_data = key_data[0]
     
-    print(key_data)
-    print(b(key_data['user_key']))
-    # b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
-    # key = b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
+    # print(key_data)
+    # print(b(key_data['user_key']))
+    # # b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
+    # # key = b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
     key = b(key_data['user_key'])
     crypt_message = "this is a secret message".encode()
     f = Fernet(key)
@@ -180,7 +230,7 @@ def on_messages_dashboard():
 
     # return render_template("thoughts.html", user_data=user_data, messages=messages, liked_messages=liked_messages)
 
-    return render_template("dashboard.html", user_data=user_data, whispers=whispers, key_data=key_data)
+    return render_template("dashboard.html", user_data=user_data, whispers=whispers, key_data=key_data, dec_whispers=dec_whispers)
 
 @app.route('/write_whisper', methods=['POST'])
 def on_add_whisper():
@@ -192,9 +242,23 @@ def on_add_whisper():
         flash("Whisper must be at least 5 characters.")
     if is_valid:
         mysql = connectToMySQL(DATABASE)
+        query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+        data = {
+            'u_id': session['user_id']
+        }
+        key_data = mysql.query_db(query, data)
+        if key_data:
+            key_data = key_data[0]
+            key = b(key_data['user_key'])
+            crypt_message = request.form['a_whisper'].encode()
+            f = Fernet(key)
+            encrypted_message = f.encrypt(crypt_message)
+            # print(f"this is an {encrypted_message} message!!!!!")
+
+        mysql = connectToMySQL(DATABASE)
         query = "INSERT INTO messages (message, author_id, created_at, updated_at) VALUES (%(msg)s, %(a_id)s, NOW(), NOW())"
         data = {
-            'msg': request.form['a_whisper'],
+            'msg': encrypted_message,
             'a_id': session['user_id']
         }
         mysql.query_db(query, data)
@@ -229,7 +293,7 @@ def users_to_follow():
         'u_id': session['user_id']
     }
     users = mysql.query_db(query, data)
-    print(users)
+    # print(users)
     return render_template("/follow.html", users=users, followed_ids=followed_ids)
 
 @app.route("/follow_user/<user_id>")

@@ -73,16 +73,16 @@
                 <div class="card ml-5">
                     <div class="card-body">
                     {% if whispers %}
-                        {% for whisper in whispers %}
-                            <p class="font-weight-bold mt-5">{{whisper['first_name']}} whispers:</p>
+                        {% for dec_whisper in dec_whispers %}
+                            <p class="font-weight-bold mt-5">{{dec_whisper['first_name']}} {{dec_whisper['last_name']}} whispers:</p>
                             <!-- <p>Hello World!!!</p> -->
-                            <p>{{whisper['message']}}</p>
-                            <p>{{whisper['likes']}} people like this</p>
-                            {% if whisper.author_id == session['user_id'] %}
-                                <p><button><a href="/delete_whisper/{{whisper['message_id']}}">Delete</a></button></p>
+                            <p>{{dec_whisper['message']}}</p>
+                            <p>{{dec_whisper['likes']}} people like this</p>
+                            {% if dec_whisper.author_id == session['user_id'] %}
+                                <p><button><a href="/delete_whisper/{{dec_whisper['message_id']}}">Delete</a></button></p>
                             {% endif %}
-                            {% if whisper.author_id != session['user_id'] %}
-                                <p><button><a href="/follow/{{whisper['author_id']}}">Follow {{whisper['first_name']}} {{whisper['last_name']}}</a></button></p>
+                            {% if dec_whisper.author_id != session['user_id'] %}
+                                <p><button><a href="/follow/{{dec_whisper['author_id']}}">Follow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button></p>
                             {% endif %}
                         {% endfor %}
                     {% endif %}
