@@ -149,12 +149,12 @@ def on_messages_dashboard():
     
     mysql = connectToMySQL(DATABASE)
     query = """SELECT *, 
-    COUNT(message_like_id) AS likes 
-    FROM messages 
-    JOIN users ON messages.author_id = users.user_id 
-    LEFT JOIN user_likes 
-    ON messages.message_id = user_likes.message_like_id 
-    GROUP BY messages.message_id ORDER BY messages.message_id DESC"""
+            COUNT(message_like_id) AS likes 
+            FROM messages 
+            JOIN users ON messages.author_id = users.user_id 
+            LEFT JOIN user_likes 
+            ON messages.message_id = user_likes.message_like_id 
+            GROUP BY messages.message_id ORDER BY messages.message_id DESC"""
     whispers = mysql.query_db(query, data)
 
 
@@ -174,6 +174,7 @@ def on_messages_dashboard():
         'u_id': session['user_id']
     }
     users = mysql.query_db(query, data)
+    user = users[0]
 
 
 
@@ -189,20 +190,25 @@ def on_messages_dashboard():
         key_data = key_data[0]
 
     mysql = connectToMySQL(DATABASE)
-    query = "SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key FROM messages JOIN dojo_messages.keys ON messages.author_id = dojo_messages.keys.user_id"
+    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key 
+                FROM messages 
+                JOIN dojo_messages.keys 
+                ON messages.author_id = dojo_messages.keys.user_id"""
     dec_whispers = mysql.query_db(query, data)
 
     for i in dec_whispers:
         # print(i['user_key'])
         key = (i['user_key'])
         f = Fernet(key)
-        for user in users:
-            print(user)
-            print(f"HIHIHIHIH***** {followed_ids}")
+        #import ipdb; ipdb.set_trace()
+        if followed_ids:
             if user['user_id'] in followed_ids:
                 i['message'] = f.decrypt(b(i['message']))
                 i['message'] = i['message'].decode("utf-8")
-        print(i['message'])
+                i['is_decrypted'] = True     
+            else:
+                i['is_decrypted'] = False
+                print(i['message'])
 
     # for i in dec_whispers:
     #     print(i['message'])
