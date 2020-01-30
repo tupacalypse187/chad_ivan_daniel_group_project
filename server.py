@@ -192,9 +192,22 @@ def on_add_whisper():
         flash("Whisper must be at least 5 characters.")
     if is_valid:
         mysql = connectToMySQL(DATABASE)
+        query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+        data = {
+            'u_id': session['user_id']
+        }
+        key_data = mysql.query_db(query, data)
+        if key_data:
+            key_data = key_data[0]
+            key = b(key_data['user_key'])
+            crypt_message = request.form['a_whisper'].encode()
+            f = Fernet(key)
+            encrypted_message = f.encrypt(crypt_message)
+
+        mysql = connectToMySQL(DATABASE)
         query = "INSERT INTO messages (message, author_id, created_at, updated_at) VALUES (%(msg)s, %(a_id)s, NOW(), NOW())"
         data = {
-            'msg': request.form['a_whisper'],
+            'msg': encrypted_message,
             'a_id': session['user_id']
         }
         mysql.query_db(query, data)
