@@ -174,7 +174,8 @@ def on_messages_dashboard():
         'u_id': session['user_id']
     }
     users = mysql.query_db(query, data)
-    user = users[0]
+    if users:
+        user = users[0]
 
 
 
@@ -190,20 +191,27 @@ def on_messages_dashboard():
         key_data = key_data[0]
 
     mysql = connectToMySQL(DATABASE)
-    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key 
+    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name 
                 FROM messages 
                 JOIN dojo_messages.keys 
-                ON messages.author_id = dojo_messages.keys.user_id"""
+                ON messages.author_id = dojo_messages.keys.user_id
+                JOIN users ON messages.author_id = users.user_id 
+                LEFT JOIN user_likes 
+                ON messages.message_id = user_likes.message_like_id"""
     dec_whispers = mysql.query_db(query, data)
 
     for i in dec_whispers:
+        print(i)
         # print(i['user_key'])
         key = (i['user_key'])
         f = Fernet(key)
         #import ipdb; ipdb.set_trace()
         if followed_ids:
+            # print("test4")
             if user['user_id'] in followed_ids:
-                i['message'] = f.decrypt(b(i['message']))
+                # print("test5")
+                i['message'] = f.decrypt(b(i['message']), ttl=None)
+                # print("test6")
                 i['message'] = i['message'].decode("utf-8")
                 i['is_decrypted'] = True     
             else:
@@ -226,13 +234,13 @@ def on_messages_dashboard():
     # print(b(key_data['user_key']))
     # # b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
     # # key = b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
-    key = b(key_data['user_key'])
-    crypt_message = "this is a secret message".encode()
-    f = Fernet(key)
-    encrypted = f.encrypt(crypt_message)
-    print(encrypted)
-    decrypted = f.decrypt(encrypted)
-    print(decrypted)
+    # key = b(key_data['user_key'])
+    # crypt_message = "this is a secret message".encode()
+    # f = Fernet(key)
+    # encrypted = f.encrypt(crypt_message)
+    # print(encrypted)
+    # decrypted = f.decrypt(encrypted)
+    # print(decrypted)
 
     # return render_template("thoughts.html", user_data=user_data, messages=messages, liked_messages=liked_messages)
 
