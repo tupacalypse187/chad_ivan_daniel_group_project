@@ -73,7 +73,7 @@
                 <div class="card ml-5">
                     <div class="card-body">
                     {% if whispers %}
-                        {% for dec_whisper in dec_whispers %}
+                        {% for dec_whisper in dec_whispers | sort(attribute='message_id', reverse=True) %}
                             <p class="font-weight-bold mt-5">{{dec_whisper['first_name']}} {{dec_whisper['last_name']}} whispers:</p>
                             <!-- <p>Hello World!!!</p> -->
                             <p>{{dec_whisper['message']}}</p>
