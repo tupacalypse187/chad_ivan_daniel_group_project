@@ -10,11 +10,16 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.fernet import Fernet
 from yubico_client.py3 import b
+from werkzeug.utils import secure_filename
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 DATABASE = 'dojo_messages'
 app = Flask(__name__)
 app.secret_key = "Blahzay Blahzay"
 bcrypt = Bcrypt(app)
+
+UPLOAD_FOLDER = 'static/images'
+ALLOWED_EXTENSIONS = {"jpeg", "png", "jpg"}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def index():
@@ -139,7 +144,7 @@ def on_messages_dashboard():
     if 'user_id' not in session:
         return redirect('/')
     mysql = connectToMySQL(DATABASE)
-    query = "SELECT first_name, last_name FROM users WHERE user_id = %(u_id)s"
+    query = "SELECT first_name, last_name, avatar, bio FROM users WHERE user_id = %(u_id)s"
     data = {
         'u_id': session['user_id']
     }
@@ -156,9 +161,6 @@ def on_messages_dashboard():
     ON messages.message_id = user_likes.message_like_id 
     GROUP BY messages.message_id ORDER BY messages.message_id DESC"""
     whispers = mysql.query_db(query, data)
-
-
-
 
     mysql = connectToMySQL(DATABASE)
     query = "SELECT followed_id FROM followers WHERE follower_id = %(u_id)s"
@@ -266,6 +268,60 @@ def on_messages_dashboard():
 
     return render_template("dashboard.html", user_data=user_data, whispers=whispers, key_data=key_data, dec_whispers=dec_whispers, followed_ids=followed_ids)
 
+def allowed_file(filename):
+    return '.' in filename and \
+    filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/upload_img', methods=['GET', 'POST'])
+def upload_img():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            flash('Please select a file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+            mysql = connectToMySQL(DATABASE)
+            query = "UPDATE users SET avatar = %(av)s WHERE user_id = %(u_id)s"
+
+            data = {
+                "av": filename,
+                "u_id": session['user_id']
+            }
+            mysql.query_db(query, data)
+            return redirect(request.url)
+        
+    return redirect('/dashboard')
+
+@app.route('/update_bio')
+def update_bio():
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT bio FROM users WHERE user_id = %(u_id)s"
+
+    data = {
+        "u_id": session['user_id']
+    }
+    bio = mysql.query_db(query, data)
+    return render_template("update_bio.html", bio = bio)
+
+@app.route('/edit_bio', methods=['POST'])
+def edit_bio():
+    mysql = connectToMySQL(DATABASE)
+    query = "UPDATE users SET bio = %(bio)s WHERE user_id = %(u_id)s"
+
+    data = {
+        "bio": request.form['bio'],
+        "u_id": session['user_id']
+    }
+    mysql.query_db(query, data)
+
+    return redirect('/dashboard')
+
 @app.route('/write_whisper', methods=['POST'])
 def on_add_whisper():
     if 'user_id' not in session:
@@ -322,7 +378,7 @@ def users_to_follow():
     followed_ids = [data['followed_id'] for data in followed_users]
 
     mysql = connectToMySQL(DATABASE)
-    query = "SELECT users.user_id, users.first_name, users.last_name FROM users WHERE users.user_id != %(u_id)s"
+    query = "SELECT users.user_id, users.first_name, users.last_name, users.avatar FROM users WHERE users.user_id != %(u_id)s"
     data = {
         'u_id': session['user_id']
     }
@@ -374,6 +430,9 @@ def on_unfollow(f_id):
     mysql.query_db(query, data)
     return redirect("/ninjas")
 
+@app.route("/contact_us")
+def contact_us():
+    return render_template("/contact.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

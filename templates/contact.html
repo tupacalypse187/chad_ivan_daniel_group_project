@@ -45,7 +45,11 @@
         </div>
         <div class="row bg-info m-3 rounded">
             <div class="col text-center">
-                <button class="btn m-3 bg-dark"><a class="h5 text-decoration-none text-white" href="/">Home</a></button>
+                {% if session['user_id'] %}
+                    <button class="btn m-3 bg-dark"><a class="h5 text-decoration-none text-white" href="/dashboard">Dashboard</a></button>
+                {% else %}
+                    <button class="btn m-3 bg-dark"><a class="h5 text-decoration-none text-white" href="/">Home</a></button>
+                {% endif %}
             </div>
         </div>
     </div>
