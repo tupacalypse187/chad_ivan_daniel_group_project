@@ -47,7 +47,7 @@
                             <td>{{user['first_name']}} {{user['last_name']}}</td>
                             {% if user['user_id'] not in followed_ids %}
                                     <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow_user/{{user['user_id']}}">Follow</a></button></td>
-                             {% elif user['user_id'] in followed_ids %}
+                            {% elif user['user_id'] in followed_ids %}
                                     <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/unfollow_user/{{user['user_id']}}">Unfollow</a></button></td>
                                 </tr>
                             {% endif %}

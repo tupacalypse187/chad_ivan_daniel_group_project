@@ -195,21 +195,48 @@ def on_messages_dashboard():
                 ON messages.author_id = dojo_messages.keys.user_id
                 JOIN users ON messages.author_id = users.user_id 
                 LEFT JOIN user_likes 
-                ON messages.message_id = user_likes.message_like_id
-                ORDER BY messages.message_id DESC"""
+                ON messages.message_id = user_likes.message_like_id"""
+                # ORDER BY messages.message_id DESC"""
     dec_whispers = mysql.query_db(query, data)
 
-    for i in dec_whispers:
-        # print(i['user_key'])
-        key = (i['user_key'])
-        f = Fernet(key)
-        for user in users:
-            print(user)
-            print(f"HIHIHIHIH***** {followed_ids}")
-            if user['user_id'] in followed_ids:
-                i['message'] = f.decrypt(b(i['message']), ttl=None)
-                i['message'] = i['message'].decode("utf-8")
-        print(i['message'])
+    # for i in dec_whispers:
+    #     # print(i['user_key'])
+    #     key = (i['user_key'])
+    #     f = Fernet(key)
+    #     print(f"GHGHGHGHGH***** {followed_ids}")
+    #     # for user in users:
+    #         # print(user)
+    #     print(f"HIHIHIHIH***** {followed_ids}")
+    #     # if session['user_id'] in followed_ids:
+    #     if followed_ids:
+    #         for j in followed_ids:
+    #             print(followed_ids)
+    #             print(f"AUIYWUAYDSUIHDS{i}")
+    #             print(f"UIYUAYUIYUIAO{j}")
+    #             i['message'] = f.decrypt(b(i['message']), ttl=None)
+    #             i['message'] = i['message'].decode("utf-8")
+    #     print(i['message'])
+
+    print(dec_whispers)
+
+    if followed_ids:
+        for i in followed_ids:
+            print(i)
+            print(dec_whispers[i-1]['user_key'])
+            # print(i['user_key'])
+            key = (dec_whispers[i-1]['user_key'])
+            f = Fernet(key)
+            # print(f"GHGHGHGHGH***** {followed_ids}")
+            # for user in users:
+                # print(user)
+            # print(f"HIHIHIHIH***** {followed_ids}")
+            # if session['user_id'] in followed_ids:
+            print(followed_ids)
+            print(f"AUIYWUAYDSUIHDS{i}")
+            # print(f"UIYUAYUIYUIAO{j}")
+            dec_whispers[i-1]['message'] = f.decrypt(b(dec_whispers[i-1]['message']), ttl=None)
+            dec_whispers[i-1]['message'] = dec_whispers[i-1]['message'].decode("utf-8")
+            print((dec_whispers[i-1]['message']))
 
     # for i in dec_whispers:
     #     print(i['message'])
