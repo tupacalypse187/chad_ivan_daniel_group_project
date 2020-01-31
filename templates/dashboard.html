@@ -82,8 +82,12 @@
                                 <p><button><a href="/delete_whisper/{{dec_whisper['message_id']}}">Delete</a></button></p>
                             {% endif %}
                             {% if dec_whisper.author_id != session['user_id'] %}
-                                <p><button><a href="/follow/{{dec_whisper['author_id']}}">Follow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button></p>
+                                {% if dec_whisper['author_id'] not in followed_ids %}
+                                    <p><button><a href="/follow/{{dec_whisper['author_id']}}">Follow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button></p>
+                                {% else %}
+                                <p><button><a href="/unfollow/{{dec_whisper['author_id']}}">Unfollow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button></p>
                             {% endif %}
+                                {% endif %}
                         {% endfor %}
                     {% endif %}
                     </div>
