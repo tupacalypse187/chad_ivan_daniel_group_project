@@ -36,6 +36,7 @@
                     <thead>
                         <tr>
                             <!-- <th scope="col"></th> -->
+                            <th>Avatar</th>
                             <th scope="col">Name</th>
                             <th scope="col">Unfollow/Follow</th>
                         </tr>
@@ -44,6 +45,7 @@
                         {% for user in users %}
                         <tr>
                             <!-- <th scope="row">1</th> -->
+                            <td><img src="/static/images/{{user['avatar']}}" alt="Hello World" width="100px" height="100px"></td>
                             <td>{{user['first_name']}} {{user['last_name']}}</td>
                             {% if user['user_id'] not in followed_ids %}
                                     <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow_user/{{user['user_id']}}">Follow</a></button></td>
@@ -58,7 +60,7 @@
         </div>
         <div class="row bg-info m-3 rounded">
             <div class="col text-center">
-                <button class="btn m-3 bg-dark"><a class="h5 text-decoration-none text-white" href="/dashboard">Home</a></button>
+                <button class="btn m-3 bg-dark"><a class="h5 text-decoration-none text-white" href="/dashboard">Dashboard</a></button>
             </div>
         </div>
     </body>
