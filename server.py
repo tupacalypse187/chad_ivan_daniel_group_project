@@ -149,12 +149,12 @@ def on_messages_dashboard():
     
     mysql = connectToMySQL(DATABASE)
     query = """SELECT *, 
-            COUNT(message_like_id) AS likes 
-            FROM messages 
-            JOIN users ON messages.author_id = users.user_id 
-            LEFT JOIN user_likes 
-            ON messages.message_id = user_likes.message_like_id 
-            GROUP BY messages.message_id ORDER BY messages.message_id DESC"""
+    COUNT(message_like_id) AS likes 
+    FROM messages 
+    JOIN users ON messages.author_id = users.user_id 
+    LEFT JOIN user_likes 
+    ON messages.message_id = user_likes.message_like_id 
+    GROUP BY messages.message_id ORDER BY messages.message_id DESC"""
     whispers = mysql.query_db(query, data)
 
 
@@ -174,8 +174,6 @@ def on_messages_dashboard():
         'u_id': session['user_id']
     }
     users = mysql.query_db(query, data)
-    if users:
-        user = users[0]
 
 
 
@@ -191,32 +189,27 @@ def on_messages_dashboard():
         key_data = key_data[0]
 
     mysql = connectToMySQL(DATABASE)
-    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name 
+    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
                 FROM messages 
                 JOIN dojo_messages.keys 
                 ON messages.author_id = dojo_messages.keys.user_id
                 JOIN users ON messages.author_id = users.user_id 
                 LEFT JOIN user_likes 
-                ON messages.message_id = user_likes.message_like_id"""
+                ON messages.message_id = user_likes.message_like_id
+                ORDER BY messages.message_id DESC"""
     dec_whispers = mysql.query_db(query, data)
 
     for i in dec_whispers:
-        print(i)
         # print(i['user_key'])
         key = (i['user_key'])
         f = Fernet(key)
-        #import ipdb; ipdb.set_trace()
-        if followed_ids:
-            # print("test4")
+        for user in users:
+            print(user)
+            print(f"HIHIHIHIH***** {followed_ids}")
             if user['user_id'] in followed_ids:
-                # print("test5")
                 i['message'] = f.decrypt(b(i['message']), ttl=None)
-                # print("test6")
                 i['message'] = i['message'].decode("utf-8")
-                i['is_decrypted'] = True     
-            else:
-                i['is_decrypted'] = False
-                print(i['message'])
+        print(i['message'])
 
     # for i in dec_whispers:
     #     print(i['message'])
@@ -244,7 +237,7 @@ def on_messages_dashboard():
 
     # return render_template("thoughts.html", user_data=user_data, messages=messages, liked_messages=liked_messages)
 
-    return render_template("dashboard.html", user_data=user_data, whispers=whispers, key_data=key_data, dec_whispers=dec_whispers)
+    return render_template("dashboard.html", user_data=user_data, whispers=whispers, key_data=key_data, dec_whispers=dec_whispers, followed_ids=followed_ids)
 
 @app.route('/write_whisper', methods=['POST'])
 def on_add_whisper():
@@ -309,6 +302,28 @@ def users_to_follow():
     users = mysql.query_db(query, data)
     # print(users)
     return render_template("/follow.html", users=users, followed_ids=followed_ids)
+
+@app.route("/follow/<user_id>")
+def follow_this_user_dashboard(user_id):
+    mysql = connectToMySQL(DATABASE)
+    query = "INSERT INTO followers (follower_id, followed_id) VALUES (%(folwr)s, %(folwd)s)"
+    data = {
+        'folwr': session['user_id'],
+        'folwd': user_id
+    }
+    mysql.query_db(query, data)
+    return redirect("/dashboard")
+
+@app.route("/unfollow/<f_id>")
+def on_unfollow_dashboard(f_id):
+    mysql = connectToMySQL(DATABASE)
+    query = "DELETE FROM followers WHERE follower_id = %(u_id)s AND followed_id = %(f_id)s"
+    data = {
+        'u_id': session['user_id'],
+        'f_id': f_id
+    }
+    mysql.query_db(query, data)
+    return redirect("/dashboard")
 
 @app.route("/follow_user/<user_id>")
 def follow_this_user(user_id):
