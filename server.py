@@ -12,7 +12,7 @@ from cryptography.fernet import Fernet
 from yubico_client.py3 import b
 from werkzeug.utils import secure_filename
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
-DATABASE = 'dojo_messages'
+DATABASE = 'f8x0a94mtjmenwxa'
 app = Flask(__name__)
 app.secret_key = "Blahzay Blahzay"
 bcrypt = Bcrypt(app)
