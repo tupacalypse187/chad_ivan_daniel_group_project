@@ -217,12 +217,15 @@ def on_messages_dashboard():
             else:
                 is_okay = False
                 print(False)
-
-    for i in following_followed:
-        key = (dec_whispers[i-1]['user_key'])
-        f = Fernet(key)
-        dec_whispers[i-1]['message'] = f.decrypt(b(dec_whispers[i-1]['message']), ttl=None)
-        dec_whispers[i-1]['message'] = dec_whispers[i-1]['message'].decode("utf-8")
+    else:
+        is_okay = False
+        print(False)
+    if is_okay:
+        for i in following_followed:
+            key = (dec_whispers[i-1]['user_key'])
+            f = Fernet(key)
+            dec_whispers[i-1]['message'] = f.decrypt(b(dec_whispers[i-1]['message']), ttl=None)
+            dec_whispers[i-1]['message'] = dec_whispers[i-1]['message'].decode("utf-8")
 
     mysql = connectToMySQL(DATABASE)
     query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
