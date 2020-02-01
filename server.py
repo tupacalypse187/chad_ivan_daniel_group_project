@@ -169,6 +169,7 @@ def on_messages_dashboard():
     }
     followed_users = mysql.query_db(query, data)
     followed_ids = [data['followed_id'] for data in followed_users]
+    print(followed_ids)
 
     mysql = connectToMySQL(DATABASE)
     query = "SELECT follower_id FROM followers WHERE followed_id = %(u_id)s"
@@ -177,6 +178,7 @@ def on_messages_dashboard():
     }
     follower_users = mysql.query_db(query, data)
     follower_ids = [data['follower_id'] for data in follower_users]
+    print(follower_ids)
 
     mysql = connectToMySQL(DATABASE)
     query = "SELECT users.user_id, users.first_name, users.last_name FROM users WHERE users.user_id != %(u_id)s"
@@ -227,21 +229,34 @@ def on_messages_dashboard():
     #             i['message'] = i['message'].decode("utf-8")
     #     print(i['message'])
 
-    print(dec_whispers)
-
-    # if  followed_ids:
+    # print(dec_whispers)
+    my_list = [session['user_id']]
+    if  followed_ids:
+        print(True)
+    else:
+        print(False)
+    if follower_ids:
+        for j in follower_ids:
+            if j in followed_ids:
+                is_okay = True
+                my_list.append(j)
+                print(True)
+            else:
+                is_okay = False
+                print(False)
+    # if 2 in followed_ids:
     #     print(True)
     # else:
     #     print(False)
-    # if follower_ids:
-    #     print(True)
-    # else:
-    #     print(False)
+    if my_list:
+        print(my_list)
+    else:
+        my_list = False
 
-    if followed_ids:
-        for i in followed_ids:
-            print(i)
-            print(dec_whispers[i-1]['user_key'])
+    if my_list:
+        for i in my_list:
+            # print(i)
+            # print(dec_whispers[i-1]['user_key'])
             # print(i['user_key'])
             key = (dec_whispers[i-1]['user_key'])
             f = Fernet(key)
@@ -250,12 +265,12 @@ def on_messages_dashboard():
                 # print(user)
             # print(f"HIHIHIHIH***** {followed_ids}")
             # if session['user_id'] in followed_ids:
-            print(followed_ids)
-            print(f"AUIYWUAYDSUIHDS{i}")
+            # print(followed_ids)
+            # print(f"AUIYWUAYDSUIHDS{i}")
             # print(f"UIYUAYUIYUIAO{j}")
             dec_whispers[i-1]['message'] = f.decrypt(b(dec_whispers[i-1]['message']), ttl=None)
             dec_whispers[i-1]['message'] = dec_whispers[i-1]['message'].decode("utf-8")
-            print((dec_whispers[i-1]['message']))
+            # print((dec_whispers[i-1]['message']))
 
     # for i in dec_whispers:
     #     print(i['message'])
