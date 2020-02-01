@@ -187,10 +187,6 @@ def on_messages_dashboard():
     }
     users = mysql.query_db(query, data)
 
-
-
-
-
     mysql = connectToMySQL(DATABASE)
     query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
     data = {
@@ -211,69 +207,22 @@ def on_messages_dashboard():
                 # ORDER BY messages.message_id DESC"""
     dec_whispers = mysql.query_db(query, data)
 
-    # for i in dec_whispers:
-    #     # print(i['user_key'])
-    #     key = (i['user_key'])
-    #     f = Fernet(key)
-    #     print(f"GHGHGHGHGH***** {followed_ids}")
-    #     # for user in users:
-    #         # print(user)
-    #     print(f"HIHIHIHIH***** {followed_ids}")
-    #     # if session['user_id'] in followed_ids:
-    #     if followed_ids:
-    #         for j in followed_ids:
-    #             print(followed_ids)
-    #             print(f"AUIYWUAYDSUIHDS{i}")
-    #             print(f"UIYUAYUIYUIAO{j}")
-    #             i['message'] = f.decrypt(b(i['message']), ttl=None)
-    #             i['message'] = i['message'].decode("utf-8")
-    #     print(i['message'])
-
-    # print(dec_whispers)
-    my_list = [session['user_id']]
-    if  followed_ids:
-        print(True)
-    else:
-        print(False)
+    following_followed = [session['user_id']]
     if follower_ids:
         for j in follower_ids:
             if j in followed_ids:
                 is_okay = True
-                my_list.append(j)
+                following_followed.append(j)
                 print(True)
             else:
                 is_okay = False
                 print(False)
-    # if 2 in followed_ids:
-    #     print(True)
-    # else:
-    #     print(False)
-    if my_list:
-        print(my_list)
-    else:
-        my_list = False
 
-    if my_list:
-        for i in my_list:
-            # print(i)
-            # print(dec_whispers[i-1]['user_key'])
-            # print(i['user_key'])
-            key = (dec_whispers[i-1]['user_key'])
-            f = Fernet(key)
-            # print(f"GHGHGHGHGH***** {followed_ids}")
-            # for user in users:
-                # print(user)
-            # print(f"HIHIHIHIH***** {followed_ids}")
-            # if session['user_id'] in followed_ids:
-            # print(followed_ids)
-            # print(f"AUIYWUAYDSUIHDS{i}")
-            # print(f"UIYUAYUIYUIAO{j}")
-            dec_whispers[i-1]['message'] = f.decrypt(b(dec_whispers[i-1]['message']), ttl=None)
-            dec_whispers[i-1]['message'] = dec_whispers[i-1]['message'].decode("utf-8")
-            # print((dec_whispers[i-1]['message']))
-
-    # for i in dec_whispers:
-    #     print(i['message'])
+    for i in following_followed:
+        key = (dec_whispers[i-1]['user_key'])
+        f = Fernet(key)
+        dec_whispers[i-1]['message'] = f.decrypt(b(dec_whispers[i-1]['message']), ttl=None)
+        dec_whispers[i-1]['message'] = dec_whispers[i-1]['message'].decode("utf-8")
 
     mysql = connectToMySQL(DATABASE)
     query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
@@ -282,21 +231,7 @@ def on_messages_dashboard():
     }
     key_data = mysql.query_db(query, data)
     if key_data:
-            key_data = key_data[0]
-    
-    # print(key_data)
-    # print(b(key_data['user_key']))
-    # # b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
-    # # key = b'9MZOGkmctjTmWKPh_gQPMx7EU5dvqW-2NwGZ67CN-tI='
-    # key = b(key_data['user_key'])
-    # crypt_message = "this is a secret message".encode()
-    # f = Fernet(key)
-    # encrypted = f.encrypt(crypt_message)
-    # print(encrypted)
-    # decrypted = f.decrypt(encrypted)
-    # print(decrypted)
-
-    # return render_template("thoughts.html", user_data=user_data, messages=messages, liked_messages=liked_messages)
+        key_data = key_data[0]
 
     return render_template("dashboard.html", user_data=user_data, whispers=whispers, key_data=key_data, dec_whispers=dec_whispers, followed_ids=followed_ids)
 
