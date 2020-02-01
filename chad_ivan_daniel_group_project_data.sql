@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `dojo_messages` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `dojo_messages`;
+CREATE DATABASE  IF NOT EXISTS `f8x0a94mtjmenwxa` /*!40100 DEFAULT CHARACTER SET utf8 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `f8x0a94mtjmenwxa`;
 -- MySQL dump 10.13  Distrib 8.0.18, for Win64 (x86_64)
 --
--- Host: localhost    Database: dojo_messages
+-- Host: localhost    Database: f8x0a94mtjmenwxa
 -- ------------------------------------------------------
 -- Server version	8.0.18
 
