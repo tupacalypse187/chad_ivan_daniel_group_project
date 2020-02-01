@@ -171,6 +171,14 @@ def on_messages_dashboard():
     followed_ids = [data['followed_id'] for data in followed_users]
 
     mysql = connectToMySQL(DATABASE)
+    query = "SELECT follower_id FROM followers WHERE followed_id = %(u_id)s"
+    data = {
+        'u_id': session['user_id']
+    }
+    follower_users = mysql.query_db(query, data)
+    follower_ids = [data['follower_id'] for data in follower_users]
+
+    mysql = connectToMySQL(DATABASE)
     query = "SELECT users.user_id, users.first_name, users.last_name FROM users WHERE users.user_id != %(u_id)s"
     data = {
         'u_id': session['user_id']
@@ -220,6 +228,15 @@ def on_messages_dashboard():
     #     print(i['message'])
 
     print(dec_whispers)
+
+    # if  followed_ids:
+    #     print(True)
+    # else:
+    #     print(False)
+    # if follower_ids:
+    #     print(True)
+    # else:
+    #     print(False)
 
     if followed_ids:
         for i in followed_ids:
