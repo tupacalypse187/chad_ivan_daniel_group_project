@@ -45,8 +45,12 @@
                         {% for user in users %}
                         <tr>
                             <!-- <th scope="row">1</th> -->
-                            <td><img src="/static/images/{{user['avatar']}}" alt="Hello World" width="100px" height="100px"></td>
-                            <td>{{user['first_name']}} {{user['last_name']}}</td>
+                            {% if user['avatar'] %}
+                                <td><img class="img-thumbnail img-fluid" src="/static/images/{{user['avatar']}}" alt="Hello World" width="100px" height="100px"></td>
+                            {% else %}
+                                <td><img src="/static/images/ninja.jpg" alt="Hello World" width="100px" height="100px"></td>
+                            {% endif %}
+                            <td><a class="h4 text-decoration-none text-white" href="/user_profile/{{user['user_id']}}">{{user['first_name']}} {{user['last_name']}}</a></td>
                             {% if user['user_id'] not in followed_ids %}
                                     <td><button class="btn btn-info"><a class="text-decoration-none text-white" href="/follow_user/{{user['user_id']}}">Follow</a></button></td>
                             {% elif user['user_id'] in followed_ids %}
