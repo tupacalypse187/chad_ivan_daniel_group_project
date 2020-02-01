@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS `dojo_messages`.`users` (
   `password` VARCHAR(63) NULL DEFAULT NULL,
   `created_at` DATETIME NULL DEFAULT NULL,
   `updated_at` DATETIME NULL DEFAULT NULL,
+  `avatar` VARCHAR(255) NULL,
+  `bio` LONGTEXT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE INDEX `reg_id_UNIQUE` (`user_id` ASC) VISIBLE)
 ENGINE = InnoDB
@@ -107,11 +109,12 @@ DEFAULT CHARACTER SET = utf8;
 DROP TABLE IF EXISTS `dojo_messages`.`keys` ;
 
 CREATE TABLE IF NOT EXISTS `dojo_messages`.`keys` (
-  `key_id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `key_id` INT NOT NULL AUTO_INCREMENT,
   `user_id` INT(11) NOT NULL,
   `user_key` VARCHAR(150) NULL,
   PRIMARY KEY (`key_id`),
   INDEX `fk_keys_users1_idx` (`user_id` ASC) VISIBLE,
+  UNIQUE INDEX `key_id_UNIQUE` (`key_id` ASC) VISIBLE,
   CONSTRAINT `fk_keys_users1`
     FOREIGN KEY (`user_id`)
     REFERENCES `dojo_messages`.`users` (`user_id`)

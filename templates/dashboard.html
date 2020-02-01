@@ -59,6 +59,7 @@
                 </div>
             </div>
             <div class="col">
+                {{user_data}}
                 <h3 class="text-center p-3">Welcome, {{user_data['first_name']}} {{user_data['last_name']}}</h3>
                 <button class="btn bg-primary mt-5"><a class="text-decoration-none text-white" href="/update_bio">Update Bio</a></button>
             </div>
@@ -83,8 +84,8 @@
         <div class="row m-3">
             <div class="col-5 p-3 bg-light rounded">
                 <h2>Your Feed:</h2>
-                <div class="card">
-                    <div class="card-body" style="height: 200px">
+                <div class="card ml-5">
+                    <div class="card-body">
                     {% if whispers %}
                         {% for dec_whisper in dec_whispers | sort(attribute='message_id', reverse=True) %}
                             <p class="font-weight-bold mt-5">{{dec_whisper['first_name']}} {{dec_whisper['last_name']}} whispers:</p>
