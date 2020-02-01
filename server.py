@@ -430,6 +430,16 @@ def on_unfollow(f_id):
     mysql.query_db(query, data)
     return redirect("/ninjas")
 
+@app.route("/user_profile/<user_id>")
+def user_profile(user_id):
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT * FROM users WHERE user_id = %(u_id)s;"
+    data = {
+        'u_id': user_id
+    }
+    user_data = mysql.query_db(query, data)
+    return render_template("profile.html", user_data = user_data[0])
+
 @app.route("/contact_us")
 def contact_us():
     return render_template("/contact.html")

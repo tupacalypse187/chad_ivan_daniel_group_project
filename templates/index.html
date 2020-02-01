@@ -21,11 +21,6 @@
         <div class="row">
             <button id="sReg">Register</button>
             <div class="col-5 text-white" id="register">
-                {% with messages=get_flashed_messages() %}
-                {% for message in messages %}
-                <p>{{message}}</p>
-                {% endfor %}
-                {% endwith %}
                 <h4>Register</h4>
                 <hr class="border-light">
                 <form action="/register" method="POST">
@@ -54,7 +49,12 @@
             </div>
 
             <div class="col-5 text-white" id="login">
-                <h4>login</h4>
+                <h4>Login</h4>
+                {% with messages=get_flashed_messages() %}
+                {% for message in messages %}
+                <p>{{message}}</p>
+                {% endfor %}
+                {% endwith %}
                 <hr class="border-light">
                 <form action="/login" method="POST">
                     <div class="form-group">
