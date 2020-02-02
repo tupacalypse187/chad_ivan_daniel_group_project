@@ -16,20 +16,17 @@
             <div class="col-3 text-center ml-5 mt-5">
                 <a class="h3 text-decoration-none text-white p-3 border-right border-dark" href="/ninjas">Ninjas</a>
                 <a class="h3 text-decoration-none text-white p-3" href="/logout">Logout</a>
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        {% for message in messages %}
-                            <br>{{message}}</br>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
             </div>
         </div>
         <hr class="bg-dark">
         <div class="row">
             <div class="col-2 mx-4 mt-3">
                 <!-- <img class="ml-2" src="../images/dojo.jpeg" alt="A picture of dojo" width="200px" height="200px"> -->
-                <img class="ml-2 img-fluid img-thumbnail" src="/static/images/{{user_data['avatar']}}" alt="Hello World">
+                {% if user_data['avatar'] %}
+                    <img class="ml-2 img-fluid img-thumbnail" src="/static/images/{{user_data['avatar']}}" alt="Hello World" width="200px" height="300px"> 
+                {% else %}
+                    <img class="ml-2 img-fluid img-thumbnail" src="/static/images/ninja.jpg" alt="Hello World" width="200px" height="300px">
+                {% endif %}
             </div>
             <div class="col-5 ml-5 mt-5">
                 <div class="bg-light p-3 rounded">
@@ -50,7 +47,15 @@
             <div class="col p-3 mx-3">
                 <h5>Ninjas Who Follow {{user_data['first_name']}}:</h5>
                 <!-- <img class="mt-4 ml-5" src="../images/dojo.jpeg" width="100px" height="100px"> -->
-                <a href="/user_profile/{{user_data['user_id']}}"><img class="mt-4 ml-5 img-thumbnail" src="/static/images/{{user_data['avatar']}}" height="100px" width="100px"></a>
+                {% for user in users %}
+                    {% if user['user_id'] in follower_ids %}
+                        {% if user['user_id'] == session['user_id'] %}
+                            <a href="/dashboard"><img class="img-thumbnail img-fluid" src="/static/images/{{user['avatar']}}" alt="Hello World" width="100px" height="100px"></a>
+                        {% else %}
+                            <a href="/user_profile/{{user['user_id']}}"><img class="img-thumbnail img-fluid" src="/static/images/{{user['avatar']}}" alt="Hello World" width="100px" height="100px"></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
         <div class="row m-3">
@@ -99,6 +104,13 @@
         </div>
         <div class="row bg-info m-3 rounded">
             <div class="col text-center">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <br>{{message}}</br>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
                 <button class="btn m-3 bg-dark"><a class="h5 text-decoration-none text-white" href="/contact_us">Contact Us</a></button>
             </div>
         </div>
