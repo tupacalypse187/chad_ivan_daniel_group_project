@@ -12,7 +12,7 @@ from cryptography.fernet import Fernet
 from yubico_client.py3 import b
 from werkzeug.utils import secure_filename
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
-DATABASE = 'dojo_messages'
+DATABASE = 'f8x0a94mtjmenwxa'
 app = Flask(__name__)
 app.secret_key = "Blahzay Blahzay"
 bcrypt = Bcrypt(app)
@@ -89,7 +89,7 @@ def on_register():
         # display success message
         # flash("User successfully added")
         mysql = connectToMySQL(DATABASE)
-        query = "INSERT INTO dojo_messages.keys (user_id, user_key) VALUES (%(u_id)s, %(key)s);"
+        query = "INSERT INTO f8x0a94mtjmenwxa.keys (user_id, user_key) VALUES (%(u_id)s, %(key)s);"
         data = {
             "u_id": session['user_id'],
             "key": ukey
@@ -188,7 +188,7 @@ def on_messages_dashboard():
     users = mysql.query_db(query, data)
 
     mysql = connectToMySQL(DATABASE)
-    query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+    query = "SELECT user_key FROM f8x0a94mtjmenwxa.keys WHERE user_id = %(u_id)s"
     data = {
         'u_id': session['user_id']
     }
@@ -197,10 +197,10 @@ def on_messages_dashboard():
         key_data = key_data[0]
 
     # mysql = connectToMySQL(DATABASE)
-    # query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
+    # query = """SELECT messages.author_id, messages.message_id, messages.message, f8x0a94mtjmenwxa.keys.user_key, users.first_name, users.last_name, users.user_id 
     #             FROM messages 
-    #             JOIN dojo_messages.keys 
-    #             ON messages.author_id = dojo_messages.keys.user_id
+    #             JOIN f8x0a94mtjmenwxa.keys 
+    #             ON messages.author_id = f8x0a94mtjmenwxa.keys.user_id
     #             JOIN users ON messages.author_id = users.user_id 
     #             LEFT JOIN user_likes 
     #             ON messages.message_id = user_likes.message_like_id"""
@@ -227,10 +227,10 @@ def on_messages_dashboard():
     # for i in following_followed:
     print(f"following_followed iteration: {following_followed}")
     mysql = connectToMySQL(DATABASE)
-    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
+    query = """SELECT messages.author_id, messages.message_id, messages.message, f8x0a94mtjmenwxa.keys.user_key, users.first_name, users.last_name, users.user_id 
                 FROM messages 
-                JOIN dojo_messages.keys 
-                ON messages.author_id = dojo_messages.keys.user_id
+                JOIN f8x0a94mtjmenwxa.keys 
+                ON messages.author_id = f8x0a94mtjmenwxa.keys.user_id
                 JOIN users ON messages.author_id = users.user_id 
                 LEFT JOIN user_likes 
                 ON messages.message_id = user_likes.message_like_id"""
@@ -256,7 +256,7 @@ def on_messages_dashboard():
             k['message'] = k['message'].decode("utf-8")
 
     mysql = connectToMySQL(DATABASE)
-    query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+    query = "SELECT user_key FROM f8x0a94mtjmenwxa.keys WHERE user_id = %(u_id)s"
     data = {
         'u_id': session['user_id']
     }
@@ -330,7 +330,7 @@ def on_add_whisper():
         flash("Whisper must be at least 5 characters.")
     if is_valid:
         mysql = connectToMySQL(DATABASE)
-        query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+        query = "SELECT user_key FROM f8x0a94mtjmenwxa.keys WHERE user_id = %(u_id)s"
         data = {
             'u_id': session['user_id']
         }
