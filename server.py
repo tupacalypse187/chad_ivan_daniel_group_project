@@ -221,7 +221,9 @@ def on_messages_dashboard():
         is_okay = False
         print(False)
     if is_okay:
+        print(following_followed)
         for i in following_followed:
+            print(f"************ {i}")
             key = (dec_whispers[i-1]['user_key'])
             f = Fernet(key)
             dec_whispers[i-1]['message'] = f.decrypt(b(dec_whispers[i-1]['message']), ttl=None)
