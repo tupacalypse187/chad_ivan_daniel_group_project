@@ -196,16 +196,16 @@ def on_messages_dashboard():
     if key_data:
         key_data = key_data[0]
 
-    mysql = connectToMySQL(DATABASE)
-    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
-                FROM messages 
-                JOIN dojo_messages.keys 
-                ON messages.author_id = dojo_messages.keys.user_id
-                JOIN users ON messages.author_id = users.user_id 
-                LEFT JOIN user_likes 
-                ON messages.message_id = user_likes.message_like_id"""
-                # ORDER BY messages.message_id DESC"""
-    dec_whispers = mysql.query_db(query, data)
+    # mysql = connectToMySQL(DATABASE)
+    # query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
+    #             FROM messages 
+    #             JOIN dojo_messages.keys 
+    #             ON messages.author_id = dojo_messages.keys.user_id
+    #             JOIN users ON messages.author_id = users.user_id 
+    #             LEFT JOIN user_likes 
+    #             ON messages.message_id = user_likes.message_like_id"""
+    #             # ORDER BY messages.message_id DESC"""
+    # dec_whispers = mysql.query_db(query, data)
 
     following_followed = [session['user_id']]
     if follower_ids:
@@ -216,18 +216,52 @@ def on_messages_dashboard():
                 print(True)
             else:
                 is_okay = False
+                dec_whispers = []
                 print(False)
     else:
         is_okay = False
+        dec_whispers = []
         print(False)
+<<<<<<< HEAD
     if is_okay:
         print(following_followed)
         for i in following_followed:
             print(f"************ {i}")
             key = (dec_whispers[i-1]['user_key'])
+=======
+    print(f"Annie are you okay? {is_okay}")
+    # if is_okay:
+    # for i in following_followed:
+    print(f"following_followed iteration: {following_followed}")
+    mysql = connectToMySQL(DATABASE)
+    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
+                FROM messages 
+                JOIN dojo_messages.keys 
+                ON messages.author_id = dojo_messages.keys.user_id
+                JOIN users ON messages.author_id = users.user_id 
+                LEFT JOIN user_likes 
+                ON messages.message_id = user_likes.message_like_id"""
+                # WHERE users.user_id = %(u_id)s OR users.user_id =  %(s_id)s"""
+                # ORDER BY messages.message_id DESC"""
+    # data = {
+    #     'u_id': following_followed,
+    #     's_id': session['user_id']
+    # }
+    dec_whispers = mysql.query_db(query, data)
+    print(dec_whispers)
+    for k in dec_whispers:
+        # print(following_followed)
+        # print(k['author_id'])
+        # print(type(k['author_id']))
+        if k['author_id'] in following_followed:
+            print(k)
+            # print(dec_whispers)
+            # print(k['user_key'])
+            key = (k['user_key'])
+>>>>>>> master
             f = Fernet(key)
-            dec_whispers[i-1]['message'] = f.decrypt(b(dec_whispers[i-1]['message']), ttl=None)
-            dec_whispers[i-1]['message'] = dec_whispers[i-1]['message'].decode("utf-8")
+            k['message'] = f.decrypt(b(k['message']), ttl=None)
+            k['message'] = k['message'].decode("utf-8")
 
     mysql = connectToMySQL(DATABASE)
     query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
