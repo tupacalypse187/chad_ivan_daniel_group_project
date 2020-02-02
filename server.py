@@ -208,15 +208,15 @@ def on_messages_dashboard():
     dec_whispers = mysql.query_db(query, data)
 
     following_followed = [session['user_id']]
-    if follower_ids:
-        for j in follower_ids:
-            if j in followed_ids:
-                is_okay = True
-                following_followed.append(j)
-                print(True)
-            else:
-                is_okay = False
-                print(False)
+    # if follower_ids:
+    for j in follower_ids:
+        if j in followed_ids:
+            is_okay = True
+            following_followed.append(j)
+            print(True)
+        else:
+            is_okay = False
+            print(False)
 
     for i in following_followed:
         key = (dec_whispers[i-1]['user_key'])
