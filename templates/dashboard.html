@@ -71,7 +71,8 @@
                 <img class="mt-4 ml-5 img-thumbnail" src="/static/images/{{user_data['avatar']}}" width="100px" height="100px">
             </div>
         </div>
-        <div class="row m-3">
+        <button id ="show">Show/Hide</button>
+        <div class="row m-3" id = "whisper">
             <div class="col-5 p-3 bg-light rounded">
                 <h2>Whisper... Share Your Secret Here:</h2>
                 <form action="/write_whisper" method="POST">
@@ -81,7 +82,7 @@
             </div>
         </div>
         <hr>
-        <div class="row m-3">
+        <div class="row m-3" >
             <div class="col-5 p-3 bg-light rounded">
                 <h2>Your Feed:</h2>
                 <div class="card ml-5">
@@ -97,9 +98,9 @@
                             {% endif %}
                             {% if dec_whisper.author_id != session['user_id'] %}
                                 {% if dec_whisper['author_id'] not in followed_ids %}
-                                    <p><button><a href="/follow/{{dec_whisper['author_id']}}">Follow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button></p>
+                                    <p><button id = "bFollow"><a href="/follow/{{dec_whisper['author_id']}}">Follow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button id></p>
                                 {% else %}
-                                <p><button><a href="/unfollow/{{dec_whisper['author_id']}}">Unfollow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button></p>
+                                <p><button id = "bUnfollow"><a href="/unfollow/{{dec_whisper['author_id']}}">Unfollow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button></p>
                             {% endif %}
                                 {% endif %}
                         {% endfor %}
@@ -121,5 +122,25 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            $("#whisper").fadeOut();
+            $("#show").click(function() {
+                $("#whisper").fadeToggle(1000);
+                });
+            $('button').click(function(){
+                $("bFollow").load("dashboard.html");
+            
+            });
+        });
+    </script>
 </body>
 </html>
