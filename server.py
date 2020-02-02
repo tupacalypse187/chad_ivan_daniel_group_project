@@ -222,13 +222,6 @@ def on_messages_dashboard():
         is_okay = False
         dec_whispers = []
         print(False)
-<<<<<<< HEAD
-    if is_okay:
-        print(following_followed)
-        for i in following_followed:
-            print(f"************ {i}")
-            key = (dec_whispers[i-1]['user_key'])
-=======
     print(f"Annie are you okay? {is_okay}")
     # if is_okay:
     # for i in following_followed:
@@ -248,7 +241,7 @@ def on_messages_dashboard():
     #     's_id': session['user_id']
     # }
     dec_whispers = mysql.query_db(query, data)
-    print(dec_whispers)
+    # print(dec_whispers)
     for k in dec_whispers:
         # print(following_followed)
         # print(k['author_id'])
@@ -258,7 +251,6 @@ def on_messages_dashboard():
             # print(dec_whispers)
             # print(k['user_key'])
             key = (k['user_key'])
->>>>>>> master
             f = Fernet(key)
             k['message'] = f.decrypt(b(k['message']), ttl=None)
             k['message'] = k['message'].decode("utf-8")
