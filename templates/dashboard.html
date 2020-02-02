@@ -16,13 +16,6 @@
             <div class="col-3 text-center ml-5 mt-5">
                 <a class="h3 text-decoration-none text-white p-3 border-right border-dark" href="/ninjas">Ninjas</a>
                 <a class="h3 text-decoration-none text-white p-3" href="/logout">Logout</a>
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        {% for message in messages %}
-                            <br>{{message}}</br>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
             </div>
         </div>
         <hr class="bg-dark">
@@ -61,13 +54,28 @@
             <div class="col">
                 <h3 class="text-center p-3">Welcome, {{user_data['first_name']}} {{user_data['last_name']}}</h3>
                 <button class="btn bg-primary mt-5"><a class="text-decoration-none text-white" href="/update_bio">Update Bio</a></button>
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <br>{{message}}</br>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
             </div>
         </div>
         <div class="row">
             <div class="col p-3 mx-3">
                 <h5>Ninjas Who Follow You:</h5>
                 <!-- <img class="mt-4 ml-5" src="../images/dojo.jpeg" width="100px" height="100px"> -->
-                <img class="mt-4 ml-5 img-thumbnail" src="/static/images/{{user_data['avatar']}}" width="100px" height="100px">
+                {% for user in users %}
+                    {% if user['user_id'] in follower_ids %}
+                        {% if user['user_id'] == session['user_id'] %}
+                        <a href="/dashboard"><img class="img-thumbnail img-fluid" src="/static/images/{{user['avatar']}}" alt="Hello World" width="100px" height="100px"></a>
+                        {% else %}
+                        <a href="/user_profile/{{user['user_id']}}"><img class="img-thumbnail img-fluid" src="/static/images/{{user['avatar']}}" alt="Hello World" width="100px" height="100px"></a>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
         <button id ="show">Show/Hide</button>
