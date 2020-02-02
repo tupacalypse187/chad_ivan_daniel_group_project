@@ -436,7 +436,152 @@ def user_profile(user_id):
         'u_id': user_id
     }
     user_data = mysql.query_db(query, data)
-    return render_template("profile.html", user_data = user_data[0])
+
+    mysql = connectToMySQL(DATABASE)
+    query = """SELECT *, 
+    COUNT(message_like_id) AS likes 
+    FROM messages 
+    JOIN users ON messages.author_id = users.user_id 
+    LEFT JOIN user_likes 
+    ON messages.message_id = user_likes.message_like_id 
+    GROUP BY messages.message_id ORDER BY messages.message_id DESC"""
+    whispers = mysql.query_db(query, data)
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT followed_id FROM followers WHERE follower_id = %(u_id)s"
+    data = {
+        'u_id': user_id
+    }
+    followed_users = mysql.query_db(query, data)
+    followed_ids = [data['followed_id'] for data in followed_users]
+    print(followed_ids)
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT follower_id FROM followers WHERE followed_id = %(u_id)s"
+    data = {
+        'u_id': user_id
+    }
+    follower_users = mysql.query_db(query, data)
+    follower_ids = [data['follower_id'] for data in follower_users]
+    print(follower_ids)
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT users.user_id, users.first_name, users.last_name, users.avatar FROM users WHERE users.user_id != %(u_id)s"
+    data = {
+        'u_id': user_id
+    }
+    users = mysql.query_db(query, data)
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+    data = {
+        'u_id': user_id
+    }
+    key_data = mysql.query_db(query, data)
+    if key_data:
+        key_data = key_data[0]
+
+    # mysql = connectToMySQL(DATABASE)
+    # query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
+    #             FROM messages 
+    #             JOIN dojo_messages.keys 
+    #             ON messages.author_id = dojo_messages.keys.user_id
+    #             JOIN users ON messages.author_id = users.user_id 
+    #             LEFT JOIN user_likes 
+    #             ON messages.message_id = user_likes.message_like_id"""
+    #             # ORDER BY messages.message_id DESC"""
+    # dec_whispers = mysql.query_db(query, data)
+
+    following_followed = [session['user_id']]
+    if follower_ids:
+        for j in follower_ids:
+            if j in followed_ids:
+                is_okay = True
+                following_followed.append(j)
+                print(True)
+            else:
+                is_okay = False
+                dec_whispers = []
+                print(False)
+    else:
+        is_okay = False
+        dec_whispers = []
+        print(False)
+    print(f"Annie are you okay? {is_okay}")
+    # if is_okay:
+    # for i in following_followed:
+    print(f"following_followed iteration: {following_followed}")
+    mysql = connectToMySQL(DATABASE)
+    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
+                FROM messages 
+                JOIN dojo_messages.keys 
+                ON messages.author_id = dojo_messages.keys.user_id
+                JOIN users ON messages.author_id = users.user_id 
+                LEFT JOIN user_likes 
+                ON messages.message_id = user_likes.message_like_id"""
+                # WHERE users.user_id = %(u_id)s OR users.user_id =  %(s_id)s"""
+                # ORDER BY messages.message_id DESC"""
+    # data = {
+    #     'u_id': following_followed,
+    #     's_id': session['user_id']
+    # }
+    dec_whispers = mysql.query_db(query, data)
+    # print(dec_whispers)
+    for k in dec_whispers:
+        # print(following_followed)
+        # print(k['author_id'])
+        # print(type(k['author_id']))
+        if k['author_id'] in following_followed:
+            print(k)
+            # print(dec_whispers)
+            # print(k['user_key'])
+            key = (k['user_key'])
+            f = Fernet(key)
+            k['message'] = f.decrypt(b(k['message']), ttl=None)
+            k['message'] = k['message'].decode("utf-8")
+
+    mysql = connectToMySQL(DATABASE)
+    query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+    data = {
+        'u_id': user_id
+    }
+    key_data = mysql.query_db(query, data)
+    if key_data:
+        key_data = key_data[0]
+    
+    return render_template("profile.html", user_data = user_data[0], whispers=whispers, key_data=key_data, dec_whispers=dec_whispers, users = users, followed_ids=followed_ids, follower_ids = follower_ids)
+
+@app.route('/write_whisper_profile', methods=['POST'])
+def on_add_whisper_profile():
+    if 'user_id' not in session:
+        return redirect("/")
+    is_valid = True
+    if len(request.form['a_whisper']) < 5:
+        is_valid = False
+        flash("Whisper must be at least 5 characters.")
+    if is_valid:
+        mysql = connectToMySQL(DATABASE)
+        query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+        data = {
+            'u_id': session['user_id']
+        }
+        key_data = mysql.query_db(query, data)
+        if key_data:
+            key_data = key_data[0]
+            key = b(key_data['user_key'])
+            crypt_message = request.form['a_whisper'].encode()
+            f = Fernet(key)
+            encrypted_message = f.encrypt(crypt_message)
+            # print(f"this is an {encrypted_message} message!!!!!")
+
+        mysql = connectToMySQL(DATABASE)
+        query = "INSERT INTO messages (message, author_id, created_at, updated_at) VALUES (%(msg)s, %(a_id)s, NOW(), NOW())"
+        data = {
+            'msg': encrypted_message,
+            'a_id': session['user_id']
+        }
+        mysql.query_db(query, data)
+    return redirect(request.referrer)
 
 @app.route("/contact_us")
 def contact_us():
