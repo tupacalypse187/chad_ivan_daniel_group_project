@@ -10,11 +10,11 @@
 <body>
     <div class="container-fluid bg-light">
         <div class="row">
-            <div class="col-8 bg-info ml-3 mt-3 rounded">
+            <div class="col-7 bg-info ml-5 mt-3 rounded">
                 <h3 class="display-4 m-4 text-white">Dojo Room</h3>
             </div>
             <div class="col-3 text-center ml-5 mt-5">
-                <a class="h3 text-decoration-none text-info p-3 border-right border-dark" href="/ninjas">Ninjas</a>
+                <a class="h3 text-decoration-none text-info p-3 border-right border-dark" href="/contact_us">Contact Us</a>
                 <a class="h3 text-decoration-none text-info p-3" href="/logout">Logout</a>
             </div>
         </div>
@@ -62,7 +62,7 @@
                 </table>
             </div>
         </div>
-        <div class="row bg-info m-3 rounded">
+        <div class="row bg-info m-4 rounded">
             <div class="col text-center">
                 <button class="btn m-3 bg-dark"><a class="h5 text-decoration-none text-white" href="/dashboard">Dashboard</a></button>
             </div>
@@ -81,7 +81,9 @@
             $("#bUnfollow").css("background-color", "red");      
             $('button').click(function(){
                 $("bFollow").load("follow.html");
-            }); 
+            });
+
+            
         });
     </script>
     </body>

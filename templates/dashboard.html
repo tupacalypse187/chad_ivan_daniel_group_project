@@ -10,7 +10,7 @@
 <body>
     <div class="container-fluid p-1" style="background-image: url({{ url_for('static', filename='images/japan.jpg') }})">
         <div class="row">
-            <div class="col-8 bg-info m-3 rounded">
+            <div class="col-7 bg-info ml-5 mt-3 rounded">
                 <h3 class="display-4 m-4 text-white">Dojo Room</h3>
             </div>
             <div class="col-3 text-center ml-5 mt-5">
@@ -33,7 +33,7 @@
                             <input type="file" class="custom-file-input" name="file" id="image">
                             <label class="custom-file-label" for ="image">Select An Image</label>
                         </div>
-                        <button class="btn bg-primary text-white mt-3" type="submit" value="submit">Upload/Change</button>
+                        <button class="btn btn-info text-white mt-3" type="submit" value="submit">Upload/Change</button>
                     </div>                           
                 </form>
             </div>
@@ -53,7 +53,7 @@
             </div>
             <div class="col">
                 <h3 class="text-center p-3">Welcome, {{user_data['first_name']}} {{user_data['last_name']}}</h3>
-                <button class="btn bg-primary mt-5"><a class="text-decoration-none text-white" href="/update_bio">Update Bio</a></button>
+                <button class="btn bg-info mt-5"><a class="text-decoration-none text-white" href="/update_bio">Update Bio</a></button>
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         {% for message in messages %}
@@ -64,7 +64,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col p-3 mx-3">
+            <div class="col p-3 mx-4">
                 <h5>Ninjas Who Follow You:</h5>
                 <!-- <img class="mt-4 ml-5" src="../images/dojo.jpeg" width="100px" height="100px"> -->
                 {% for user in users %}
@@ -78,36 +78,36 @@
                 {% endfor %}
             </div>
         </div>
-        <button id ="show">Show/Hide</button>
-        <div class="row m-3" id = "whisper">
-            <div class="col-5 p-3 bg-light rounded">
+        <button class="btn btn-info ml-4" id ="show">Write A Whisper</button>
+        <div class="row m-4" id = "whisper">
+            <div class="col-7 p-3 bg-dark text-white rounded">
                 <h2>Whisper... Share Your Secret Here:</h2>
                 <form action="/write_whisper" method="POST">
                     <textarea class="form-control" style="height: 100px" name="a_whisper" placeholder="Shhh..."></textarea>
-                    <button class="btn bg-primary text-white mt-3" type="submit" value="submit">Post</button>
+                    <button class="btn bg-info text-white mt-3" type="submit" value="submit">Post</button>
                 </form>
             </div>
         </div>
         <hr>
-        <div class="row m-3" >
-            <div class="col-5 p-3 bg-light rounded">
-                <h2>Your Feed:</h2>
-                <div class="card ml-5">
+        <div class="row m-4" >
+            <div class="col-7 p-3 bg-dark rounded">
+                <h2 class="text-white">Your Feed:</h2>
+                <div class="card">
                     <div class="card-body">
                     {% if whispers %}
                         {% for dec_whisper in dec_whispers | sort(attribute='message_id', reverse=True) %}
-                            <p class="font-weight-bold mt-5">{{dec_whisper['first_name']}} {{dec_whisper['last_name']}} whispers:</p>
+                            <p class="font-weight-bold">{{dec_whisper['first_name']}} {{dec_whisper['last_name']}} whispers:</p>
                             <!-- <p>Hello World!!!</p> -->
                             <p>{{dec_whisper['message']}}</p>
                             <p>{{dec_whisper['likes']}} people like this</p>
                             {% if dec_whisper.author_id == session['user_id'] %}
-                                <p><button><a href="/delete_whisper/{{dec_whisper['message_id']}}">Delete</a></button></p>
+                                <p><button class="btn bg-danger"><a class="text-decoration-none text-white" href="/delete_whisper/{{dec_whisper['message_id']}}">Delete</a></button></p>
                             {% endif %}
                             {% if dec_whisper.author_id != session['user_id'] %}
                                 {% if dec_whisper['author_id'] not in followed_ids %}
-                                    <p><button id = "bFollow"><a href="/follow/{{dec_whisper['author_id']}}">Follow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button id></p>
+                                    <p><button class="btn bg-info" id = "bFollow"><a class="text-decoration-none text-white" href="/follow/{{dec_whisper['author_id']}}">Follow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button id></p>
                                 {% else %}
-                                <p><button id = "bUnfollow"><a href="/unfollow/{{dec_whisper['author_id']}}">Unfollow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button></p>
+                                <p><button class="btn bg-info" id = "bUnfollow"><a class="text-decoration-none text-white" href="/unfollow/{{dec_whisper['author_id']}}">Unfollow {{dec_whisper['first_name']}} {{dec_whisper['last_name']}}</a></button></p>
                             {% endif %}
                                 {% endif %}
                         {% endfor %}
@@ -123,7 +123,7 @@
                 <p><a href="/edit_whisper/{#{}#}"><button>Edit</button></a></p> -->
             </div>
         </div>
-        <div class="row bg-info m-3 rounded">
+        <div class="row bg-info m-4 rounded">
             <div class="col text-center">
                 <button class="btn m-3 bg-dark"><a class="h5 text-decoration-none text-white" href="/contact_us">Contact Us</a></button>
             </div>
