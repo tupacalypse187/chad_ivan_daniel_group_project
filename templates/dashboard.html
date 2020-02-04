@@ -37,11 +37,16 @@
                     </div>                           
                 </form>
             </div>
-            <div class="col-5 ml-5 mt-5">
+            <div class="col-5 ml-5 mt-5" id = "bioBody">
                 <div class="bg-light p-3 rounded">
+                    <h3>Change your bio:</h3>
+                    <form id="update-bio-form">
+                        <input type="text" name="bio" id="bio-input-text"><br>
+                    </form>
                     <h3>Your Bio:</h3>
                     <div class="card m-3 text-dark">
-                        <div class="card-body">
+                        <div class="card-body bio-body">
+
                             {% if user_data['bio'] %}
                                 <p>{{user_data['bio']}}</p>
                             {% else %}
@@ -53,7 +58,7 @@
             </div>
             <div class="col">
                 <h3 class="text-center p-3">Welcome, {{user_data['first_name']}} {{user_data['last_name']}}</h3>
-                <button class="btn bg-info mt-5"><a class="text-decoration-none text-white" href="/update_bio">Update Bio</a></button>
+                <button class="btn bg-info mt-5"><a class="text-decoration-none text-white update-bio-btn">Update Bio</a></button>
                 {% with messages = get_flashed_messages() %}
                     {% if messages %}
                         {% for message in messages %}
@@ -139,6 +144,53 @@
         crossorigin="anonymous"></script>
     <script>
         $(document).ready(function() {
+            $(".update-bio-btn").click(function(){
+                var bio = $("#bio-input-text").val();
+                if (bio == "" || bio == null) {
+                    alert("You cannot update empty bio");
+                }
+                else {
+                $.ajax({
+                    type: "POST",
+                    url: '/dashboard/update_bio',
+                    data: {"bio": bio},
+                    dataType: 'json',
+                        success: function (response) {
+                        console.log(response);
+                        $(".bio-body").text(bio);
+
+                        },
+                        error: function(xhr,status,error) {
+                            console.log(error)
+                           
+                            },
+                        })
+                }
+        });
+            //     $.ajax({
+            //         url: "/dashboard/update_bio",
+            //         method: "POST",
+            //         data: {"bio": bio}
+            //     })
+            //     .done(function(){
+            //         // $(".-body").append(whisperQ)
+            //         console.log("success");
+            //     })
+            //     return false;
+            // })
+
+            // function rebuildWhisper(){
+            //     $.ajax({
+            //         url: "/dashboard",
+            //         method: "GET",
+            //     })
+            //     .done(function(whisperQ){
+            //         $(".card-body").html(whisperQ)
+            //     })
+            // }
+
+            // setInterval(rebuildWhisper, 500)
+
             $("#whisper").fadeOut();
             $("#show").click(function() {
                 $("#whisper").fadeToggle(1000);
