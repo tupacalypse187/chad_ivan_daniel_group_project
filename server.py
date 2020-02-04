@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, jsonify
 from mysqlconnection import connectToMySQL
 import re
 import base64
@@ -319,6 +319,19 @@ def edit_bio():
     mysql.query_db(query, data)
 
     return redirect('/dashboard')
+
+@app.route("/dashboard/update_bio", methods=["POST"])
+def update_bio_api():
+    mysql = connectToMySQL(DATABASE)
+    query = "UPDATE users SET bio = %(bio)s WHERE user_id = %(u_id)s"
+
+    data = {
+        "bio": request.form['bio'],
+        "u_id": session['user_id']
+    }
+    mysql.query_db(query, data)
+
+    return jsonify({"success": "Bio has been successfully updated!"})
 
 @app.route('/write_whisper', methods=['POST'])
 def on_add_whisper():
