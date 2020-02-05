@@ -565,11 +565,6 @@ def user_profile(user_id):
     
     return render_template("profile.html", user_data = user_data[0], whispers=whispers, key_data=key_data, dec_whispers=dec_whispers, users = users, followed_ids=followed_ids, follower_ids = follower_ids)
 
-def redirect_url(default='index'):
-    return request.args.get('next') or \
-           request.referrer or \
-           url_for(default)
-
 @app.route('/write_whisper_profile', methods=['POST'])
 def on_add_whisper_profile():
     if 'user_id' not in session:
@@ -600,7 +595,7 @@ def on_add_whisper_profile():
             'a_id': session['user_id']
         }
         mysql.query_db(query, data)
-    return redirect(redirect_url())
+    return redirect(request.url)
 
 @app.route("/contact_us")
 def contact_us():
