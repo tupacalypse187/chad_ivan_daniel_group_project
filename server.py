@@ -449,7 +449,7 @@ def user_profile(user_id):
         'u_id': user_id
     }
     user_data = mysql.query_db(query, data)
-    return render_template("profile.html", user_data = user_data[0])
+    # return render_template("profile.html", user_data = user_data[0])
 
     mysql = connectToMySQL(DATABASE)
     query = """SELECT *, 
