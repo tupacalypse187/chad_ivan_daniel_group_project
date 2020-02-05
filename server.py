@@ -595,7 +595,8 @@ def on_add_whisper_profile():
             'a_id': session['user_id']
         }
         mysql.query_db(query, data)
-    return redirect(request.url)
+    return redirect(request.referrer)
+    # return redirect(request.url)
 
 @app.route("/contact_us")
 def contact_us():
