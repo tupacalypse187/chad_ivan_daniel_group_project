@@ -596,7 +596,6 @@ def on_add_whisper_profile():
         }
         mysql.query_db(query, data)
     return redirect(request.referrer)
-    # return redirect(request.url)
 
 @app.route("/contact_us")
 def contact_us():
