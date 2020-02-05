@@ -333,6 +333,8 @@ def update_bio_api():
 
     return jsonify({"success": "Bio has been successfully updated!"})
 
+
+
 @app.route('/write_whisper', methods=['POST'])
 def on_add_whisper():
     if 'user_id' not in session:
@@ -449,7 +451,6 @@ def user_profile(user_id):
         'u_id': user_id
     }
     user_data = mysql.query_db(query, data)
-    # return render_template("profile.html", user_data = user_data[0])
 
     mysql = connectToMySQL(DATABASE)
     query = """SELECT *, 
@@ -487,7 +488,7 @@ def user_profile(user_id):
     users = mysql.query_db(query, data)
 
     mysql = connectToMySQL(DATABASE)
-    query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+    query = "SELECT user_key FROM f8x0a94mtjmenwxa.keys WHERE user_id = %(u_id)s"
     data = {
         'u_id': user_id
     }
@@ -496,10 +497,10 @@ def user_profile(user_id):
         key_data = key_data[0]
 
     # mysql = connectToMySQL(DATABASE)
-    # query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
+    # query = """SELECT messages.author_id, messages.message_id, messages.message, f8x0a94mtjmenwxa.keys.user_key, users.first_name, users.last_name, users.user_id 
     #             FROM messages 
-    #             JOIN dojo_messages.keys 
-    #             ON messages.author_id = dojo_messages.keys.user_id
+    #             JOIN f8x0a94mtjmenwxa.keys 
+    #             ON messages.author_id = f8x0a94mtjmenwxa.keys.user_id
     #             JOIN users ON messages.author_id = users.user_id 
     #             LEFT JOIN user_likes 
     #             ON messages.message_id = user_likes.message_like_id"""
@@ -526,10 +527,10 @@ def user_profile(user_id):
     # for i in following_followed:
     print(f"following_followed iteration: {following_followed}")
     mysql = connectToMySQL(DATABASE)
-    query = """SELECT messages.author_id, messages.message_id, messages.message, dojo_messages.keys.user_key, users.first_name, users.last_name, users.user_id 
+    query = """SELECT messages.author_id, messages.message_id, messages.message, f8x0a94mtjmenwxa.keys.user_key, users.first_name, users.last_name, users.user_id 
                 FROM messages 
-                JOIN dojo_messages.keys 
-                ON messages.author_id = dojo_messages.keys.user_id
+                JOIN f8x0a94mtjmenwxa.keys 
+                ON messages.author_id = f8x0a94mtjmenwxa.keys.user_id
                 JOIN users ON messages.author_id = users.user_id 
                 LEFT JOIN user_likes 
                 ON messages.message_id = user_likes.message_like_id"""
@@ -555,7 +556,7 @@ def user_profile(user_id):
             k['message'] = k['message'].decode("utf-8")
 
     mysql = connectToMySQL(DATABASE)
-    query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+    query = "SELECT user_key FROM f8x0a94mtjmenwxa.keys WHERE user_id = %(u_id)s"
     data = {
         'u_id': user_id
     }
@@ -575,7 +576,7 @@ def on_add_whisper_profile():
         flash("Whisper must be at least 5 characters.")
     if is_valid:
         mysql = connectToMySQL(DATABASE)
-        query = "SELECT user_key FROM dojo_messages.keys WHERE user_id = %(u_id)s"
+        query = "SELECT user_key FROM f8x0a94mtjmenwxa.keys WHERE user_id = %(u_id)s"
         data = {
             'u_id': session['user_id']
         }
