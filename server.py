@@ -465,7 +465,7 @@ def user_profile(user_id):
     mysql = connectToMySQL(DATABASE)
     query = "SELECT followed_id FROM followers WHERE follower_id = %(u_id)s"
     data = {
-        'u_id': user_id
+        'u_id': session['user_id']
     }
     followed_users = mysql.query_db(query, data)
     followed_ids = [data['followed_id'] for data in followed_users]
