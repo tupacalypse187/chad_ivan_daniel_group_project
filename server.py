@@ -490,7 +490,7 @@ def user_profile(user_id):
     mysql = connectToMySQL(DATABASE)
     query = "SELECT user_key FROM f8x0a94mtjmenwxa.keys WHERE user_id = %(u_id)s"
     data = {
-        'u_id': user_id
+        'u_id': session['user_id']
     }
     key_data = mysql.query_db(query, data)
     if key_data:
@@ -558,7 +558,7 @@ def user_profile(user_id):
     mysql = connectToMySQL(DATABASE)
     query = "SELECT user_key FROM f8x0a94mtjmenwxa.keys WHERE user_id = %(u_id)s"
     data = {
-        'u_id': user_id
+        'u_id': session['user_id']
     }
     key_data = mysql.query_db(query, data)
     if key_data:
