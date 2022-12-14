@@ -1,6 +1,6 @@
 astroid==2.3.3
 bcrypt==3.1.7
-certifi==2019.11.28
+certifi==2022.12.7
 cffi==1.13.2
 chardet==3.0.4
 Click==7.0
@@ -27,3 +27,4 @@ urllib3==1.26.5
 Werkzeug==0.16.0
 wrapt==1.11.2
 yubico-client==1.12.0
+setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
