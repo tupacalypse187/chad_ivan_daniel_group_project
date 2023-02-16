@@ -24,7 +24,7 @@ pyOpenSSL==19.1.0
 requests==2.22.0
 six==1.13.0
 urllib3==1.26.5
-Werkzeug==0.16.0
+Werkzeug==2.2.3
 wrapt==1.11.2
 yubico-client==1.12.0
 setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
