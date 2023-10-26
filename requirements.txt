@@ -5,7 +5,7 @@ cffi==1.13.2
 chardet==3.0.4
 Click==7.0
 colorama==0.4.1
-cryptography==3.3.2
+cryptography==41.0.5
 Flask==1.1.1
 Flask-Bcrypt==0.7.1
 gunicorn==20.0.4
@@ -24,7 +24,7 @@ pyOpenSSL==19.1.0
 requests==2.22.0
 six==1.13.0
 urllib3==1.26.5
-Werkzeug==0.16.0
+Werkzeug==3.0.1
 wrapt==1.11.2
 yubico-client==1.12.0
 setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
