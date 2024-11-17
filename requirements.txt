@@ -8,7 +8,7 @@ colorama==0.4.1
 cryptography==3.3.2
 Flask==1.1.1
 Flask-Bcrypt==0.7.1
-gunicorn==20.0.4
+gunicorn==22.0.0
 idna==2.8
 isort==4.3.21
 itsdangerous==1.1.0
@@ -27,4 +27,4 @@ urllib3==1.26.5
 Werkzeug==0.16.0
 wrapt==1.11.2
 yubico-client==1.12.0
-setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
+setuptools>=70.0.0 # not directly required, pinned by Snyk to avoid a vulnerability
